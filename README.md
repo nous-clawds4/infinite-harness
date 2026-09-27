@@ -11,7 +11,7 @@ Imagine an agent, whom we will refer to as the Chief of Staff (CoS), whose job i
 
 # Launching a new Project
 
-When a new Project $P^i$ is handed to the CoS, the first step is for the CoS to create a harness for that project, $H^i$. We will use the subscript $0$ to distinguish it from what follows, but can abbreviate it without the subscript, so that $H^i = H^i_0$. This harness might use markdown files such as SKILL files, etc. Memory storage may be in local files or may be stored in graph database (such as a Tapestry instance), or may use whatever other harness design the CoS sees fit. We also define a `baseline goal`, $G^i_0$, which is to fulfill the purpose of the Project: build the thing, write the thing, do the thing, achieve whatever is demanded by the Project. The CoS may or may not (probably yes) spin up a dedicated Agent, $A^i_0$, to manage this project using this harness (the Project Manager). We call these the base goal $G^i_0$, base harness $H^i_0$, and the Project Manager $A^i_0$ for the $i^{th}$ Project, $P^i$.
+When a new Project $P^i$ is handed to the CoS, the first step is for the CoS to create a harness for that project, $H^i$. This harness might use markdown files such as SKILL files, etc. Memory storage may be in local files or may be stored in graph database (such as a Tapestry instance), or may use whatever other harness design the CoS sees fit. We also define a Goal, $G^i$, which is to fulfill the purpose of the Project: build the thing, write the thing, do the thing, achieve whatever is demanded by the Project. The CoS may or may not (probably yes) spin up a dedicated Agent, $A^i$, to manage this project using this harness (the Project Manager). We call these the primary goal $G^i$, primary harness $H^i$, and the primary Project Manager $A^i$ for the $i^{th}$ Project, $P^i$. [1]
 
 The CoS then immediately launches a new Goal, $G^i_1$, with corresponding Harness $H^i_1$ and agent $A^i_1$, the purpose of which is to improve the base harness $H^i_0$. We refer to this as the level-1 goal, the level-1 harness, and the level-1 agent for the Project.
 
@@ -32,3 +32,5 @@ The Infinite Ladder is its own project. We will define it as the first (so $i = 
 - manage the schedule and allocation of resources to each project and to each level of the ladder for each Project.
 
 More duties will be fleshed out as we develop this harness in greater detail.
+
+[1] We will use the subscript $0$ to distinguish the primary Project, Goal, Harness, and Agent from what follows, but can abbreviate them without the subscript: $H^i = H^i_0, P^i = P^i_0, $G^i = G^i_0, $A^i = A^i_0$. 
