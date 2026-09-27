@@ -21,7 +21,7 @@ This process can be repeated an arbitrary number of times. For each step up to t
 
 We don't launch new rungs willy nilly. The CoS and the Project Manager for any given project must work together to decide, not only when it is time to take another step up, but also how often to call any given Rung Manager and how many resources to dedicate to it.
 
-# Infinite Ladder for the Infinite Ladder
+# An Infinite Ladder for the Infinite Harness
 
 The Infinite Ladder is its own project. We will define it as the first (so $i = 0$) project, $P^0$, with subsequent Projects designated with superscripts `1, 2, 3, ...`: $P^1, P^2, P^3, ...$ [2] The CoS is therefore the Project Manager $A^0$ for $P^0$. The purpose of this repository is to build the "level-0 rung" of the infinite harness, $H^0_0$. [3]
 
@@ -39,5 +39,5 @@ More duties will be fleshed out as we develop this harness in greater detail.
 
 [2] Examples: $P^1$ could be to build an app; $P^2$ to solve an equation; $P^3$ to build a business; etc.
 
-[3] Note that the goal of the Infinite Ladder is to build a Harness that is personalized to the human who controls the CoS, the resources available to that CoS, and the goals, priorities and projects personalized to that human. It will therefore make sense, eventually, for the Brainstorm Harness, based on the Tapestry protocol, to integrate with the Infinite Harness for any given user.
+[3] Note that the goal of the Infinite Harness is to be personalized to the human who controls the CoS, the resources available to that CoS, and the goals, priorities and projects personalized to that human. It will therefore make sense, eventually, for the Brainstorm Harness, based on the Tapestry protocol, to integrate with the Infinite Harness for any given user.
 
