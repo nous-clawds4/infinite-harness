@@ -25,7 +25,7 @@ We don't launch new rungs willy nilly. The CoS and the Project Manager for any g
 
 Some Harness improvements may prove to be beneficial for more than one Project and/or for more than one rung within any given Project. This is easily implementable, for example, with a SKILL file that may be referenced by more than one harness $H^i_j$. As an example: consider a generic SKILL for "literature review", or "creative problem-solving"; why improve the process of doing this for only one $H^i_j$ when you can improve it for many of them all at once?
 
-There may be skills that will have a tendency to be rung-specific. The practice of literature review, for example, probably would have no role for most Projects at the base level, but may be particularly relevant for the first rung of many Projects, where the literature review is specifically to look for ideas on how to improve the baseline harness.
+There may be skills that will have a tendency to be rung-specific. The practice of literature review (to look for strategies for building a better harness) probably would have no role for most Projects at the base level, but may be highly relevant for one or more rungs above the base level.
 
 # An Infinite Ladder for the Infinite Harness
 
