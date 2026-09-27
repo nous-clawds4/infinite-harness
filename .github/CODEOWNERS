@@ -1,0 +1,11 @@
+# Goal protection (docs/hold-axis.md, docs/literature-review.md §5 and §8, recommendation 1).
+# A pull request that changes any path below needs approval from @wds4 (David Strayhorn),
+# enforced by the branch ruleset on main (require review from Code Owners, no bypass actors).
+#
+# README.md holds the goal of the Infinite Harness (L0).
+# docs/hold-axis.md holds the re-rating rule, which is L0 (hold-axis §4); the whole file is owned.
+# This file is owned too, so the protection cannot be removed without the same approval.
+
+/README.md          @wds4
+/docs/hold-axis.md  @wds4
+/.github/CODEOWNERS @wds4
