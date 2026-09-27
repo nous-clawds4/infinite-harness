@@ -1,10 +1,10 @@
 # Proposal: an IH concept model for a Tapestry instance
 
-**Status: L3 (disclosed); the whole note is a proposal.** The CoS maintains this note under the scale in [`hold-axis.md`](hold-axis.md) and records each change and its reason in the changelog at the bottom. Nothing in it has been written to any Tapestry instance. Adopting any part of it, and any write to David's instance, needs David's sign-off.
+**Status: L3 (disclosed).** The CoS maintains this note under the scale in [`hold-axis.md`](hold-axis.md) and records each change and its reason in the changelog at the bottom. The note began as a proposal. David answered its open questions on 2026-09-27 at 6:55 PM ET, and delegated the smaller ones to the CoS. §7 records his answers and the CoS's decisions, and the rest of the note has been revised to match. With those answers, the CoS may create the §4 concepts on the local R&D instance (http://localhost:7778 on David's Mac, owned by Nous). Any write to an instance David owns (tapestry.brainstorm.world, staging.brainstorm.world) still needs his sign-off.
 
 **What David asked for.** A way to represent IH data in his locally running Tapestry instance, using a feature he stressed: the concept graph's Neo4j often holds only *pointers* to data that lives elsewhere (a repo file, a local DB, a URL, a nostr event), in any format. The harness files stay in git, where diffs are auditable, and the graph holds structure plus pointers.
 
-**Sources and honesty.** §1 comes from the Tapestry repo (`nous-clawds4/tapestry`, `main` at `1e518034`, read 2026-09-27). File citations give `path:line` against that commit. §2 comes from two read-only commands run on David's Mac at about 6:15 PM ET on 2026-09-27: GET requests only, no writes, no signing. Everything from §3 on is design, marked **proposal**. Inferences are marked **(inference)**.
+**Sources and honesty.** §1 comes from the Tapestry repo (`nous-clawds4/tapestry`, `main` at `1e518034`, read 2026-09-27). File citations give `path:line` against that commit. §2 comes from two read-only commands run on David's Mac at about 6:15 PM ET on 2026-09-27: GET requests only, no writes, no signing. Everything from §3 on is design. It was marked **proposal** until David's answers of 2026-09-27; the parts his answers settled are now stated as decisions, and §7 says which answer or decision each rests on. Inferences are marked **(inference)**.
 
 ## 1. How Tapestry's concept graph works
 
@@ -56,6 +56,8 @@ When `create-concept` runs, it mints the header plus the core nodes: a Superset,
 3. **Pointer-typed `b` tags** to any nostr address (§22).
 4. **`lmdb:<tapestryKey>`**, which offloads a large `json` value to the local LMDB store. It is a storage detail, not a semantic pointer (§8, §29).
 
+**Instances and owners** (David, 2026-09-27). Anyone can run a Tapestry instance, and every instance has exactly one Owner. David (straycat) owns tapestry.brainstorm.world and staging.brainstorm.world. The local instance at http://localhost:7778 on David's Mac is owned by Nous. The whole Tapestry repo is R&D, and the local instance is one of several R&D instances; if its concepts get messed up, it is not the end of the world. The Owner is who `isOwner(req)` recognises, and the TA key is that instance's server key, so on the local instance a TA-signed record means "written by something running on Nous' instance", not "approved by David".
+
 ## 2. What the local instance showed
 
 Two read-only commands against `http://localhost:7778` on David's Mac (`/api/status`, `/api/firmware/versions`, `/api/audit/firmware`, the two primitive probes, `/api/brain/goals`, `/api/concept-graph/summaries`, and `/neighbors` for six concepts):
@@ -63,7 +65,7 @@ Two read-only commands against `http://localhost:7778` on David's Mac (`/api/sta
 - **Running and current enough.** strfry up 30 days; firmware **v1.0.0** active; the `relationship-primitives` and `node-primitives` probes present. I found no endpoint that reports the running commit, so the code version is unknown.
 - **TA pubkey `11f23fe4…`.** This is the same prefix second-brain ADR 0004 cites from its "live instance" recon, so that design was probably reconnoitred on this instance **(inference)**.
 - **63 concept headers**, including: `tapestry owner goal` (35 elements), `tapestry proposal` (10), `tapestry work record` (8), `tapestry external resource` (**0**), `tapestry restore drill` (1), `goal set` (2), `word` (584), `trusted dictionary snapshot` (117), `adoption disposition` (294).
-- **Four concepts that appear in no repo code, docs or ADRs I searched** (my `git grep`), so David presumably created them by hand **(inference)**:
+- **Four concepts that appear in no repo code, docs or ADRs I searched** (my `git grep`). I guessed that David created them by hand. That guess was wrong: David says Nous' Tapestry Assistant authored them in July, probably for the dormant Goals feature. IH does not reuse them (§7, answer 4):
   - `tapestry team` (2 elements): "Something that can be handed a goal and carry it out: a team of roles, a script, or a single session given a prompt. Each entry POINTS at where it is really defined; its internals never live here."
   - `tapestry executive action` (4): "A standing instruction the Executor runs again and again — the top-level loop that tends the goal concept and mediates attention…"
   - `tapestry privacy level` (3): "levels of privacy for data stored in the second brain…"
@@ -71,34 +73,34 @@ Two read-only commands against `http://localhost:7778` on David's Mac (`/api/sta
 - **`project for the engineering team`** (5 elements) is named in a second-brain story but is a different idea: "outlines of new features or bug fixes for tapestry…".
 - **Owner-only reads are closed from the host.** `GET /api/brain/goals` → HTTP 403 "Owner access required", as expected from outside the container.
 
-**The lesson from §2:** David's instance already has most of the parts IH needs. `tapestry owner goal` is a goal with a statement, a "done means" and a "stays inside". `tapestry external resource` is the pointer. `tapestry team` is a pointer-only home for whatever carries out a goal. `tapestry proposal` is an append-only sign-off loop. `tapestry work record` is an append-only log. The proposal below reuses them where they fit.
+**The lesson from §2:** the local instance already has several parts IH needs. `tapestry owner goal` is a goal with a statement, a "done means" and a "stays inside". `tapestry external resource` is the pointer. `tapestry proposal` is an append-only sign-off loop. `tapestry work record` is an append-only log. The model below reuses them where they fit. It does not reuse `tapestry team`, even though its description reads well for agents, because David asked that the four July concepts be left alone unless they turn out surprisingly well suited, and a harness or agent needs fields that `tapestry team` does not define.
 
-## 3. Design principles (proposal)
+## 3. Design principles
 
-1. **Git holds the text; the graph holds structure and pointers.** Every harness file, goal text and review stays in git. A graph element names it by a locator pinned to a commit. The proposed convention is `locatorKind: "repository"` and `locator: "github.com/<owner>/<repo>@<sha>:<path>[#anchor]"`. Pinning the SHA keeps the audit trail. Tracking a moving branch would not.
+1. **Git holds the text; the graph holds structure and pointers.** Every harness file, goal text and review stays in git. A graph element names it by a pointer pinned to a commit, with the branch recorded next to it for readability (§7, decision B). Pinning the SHA keeps the audit trail. Tracking a moving branch would not.
 2. **Append-only facts for anything that changes.** Changes, predictions, outcomes, re-ratings, rulings and evaluations are new elements, never edits. This follows `tapestry proposal` and `tapestry work record` ("Never edited; corrections are new records").
-3. **Link by record field in v1.** Relationships are fields holding slugs, dereferenced at read time, as in second-brain ADR 0004. Graph edges wait for `set-b-tag` (pointer-typed `b` → `REFERENCES`) or a whitelist extension.
-4. **Reuse before inventing.** The IH-specific concepts get an `ih ` name prefix so they cannot collide with personal second-brain data.
-5. **The graph records the hold axis; the owner's key enforces it** (§6).
+3. **Link by record field holding the target's address.** A relationship is a field in the record's JSON section whose value is the target's full address (`39999:<pubkey>:<d-tag>`, or `39998:…` for a concept), dereferenced at read time. This is the second brain's idiom, with addresses in place of slugs (§7, decision A). It does not depend on `set-b-tag` or PR #759.
+4. **Reuse by default.** An existing concept is reused wherever its meaning fits, and David encourages this. When two use cases turn out not to be well aligned, the concept graph will support forking the concept into two or more distinct concepts, so reuse now does not lock anything in. Only the IH-specific concepts are new, and they get an `ih ` name prefix so they cannot collide with second-brain data.
+5. **The graph records the hold axis; git enforces L0** (§6). On the local R&D instance, records are signed with the instance key, and David's personal key is not required.
 
 ## 4. Proposed concepts
 
-Here "fields" means the concept's JSON section. `→` marks a record-field link to another element (by slug).
+Here "fields" means the concept's JSON section. `→` marks a record-field link: a field holding the target's address. Every record also carries `name`, `slug` and `description`, as the second-brain records do. A **pointer** is an object with the external-resource vocabulary plus the pin (§7, decision B).
 
 | Concept | Reuse or new | Fields | Links | External pointers |
 |---|---|---|---|---|
-| **Project** $P^i$ | new `ih project` | `index` (0, 1, 2 …), `name`, `status`, `openedOn` | → Goal ($G^i$), → Harness ($H^i_0$), → Agent ($A^i$) | `repository` (the project repo) |
+| **Project** $P^i$ | new `ih project` | `index` (0, 1, 2 …), `name`, `status`, `openedOn` | → `goal` ($G^i$), → `baseHarness` ($H^i_0$), → `agent` ($A^i$) | `repository` (the project repo) |
 | **Goal** $G^i_j$ | **reuse `tapestry owner goal`** | `statement`, `deliverable` (done means), `boundary` (stays inside), `origin`, `capturedOn` | → `parent`. A rung goal $G^i_j$ ("improve $H^i_{j-1}$") is a child of $G^i$ | a `tapestry external resource` on the goal, pointing at the **original** goal text at a pinned SHA, for the drift check (d) |
-| **Harness** $H^i_j$ | new `ih harness`, also registered as a `tapestry team` entry | `project`, `rung` ($j$), `version` (commit SHA), `status` | → Project, → Rung, → `supersedes` (previous version) | `repository` locators for each harness-definition path |
+| **Harness** $H^i_j$ | new `ih harness` | `j` (the rung index), `version` (commit SHA), `branch`, `status` | → `project`, → `rung` (the rung that produced it; none for $H^i_0$), → `supersedes` (previous version) | `locators`: one pointer per harness-definition path |
 | **Rung** $j$ | new `ih rung` | `project`, `j`, `scoreDefinitions`, `minHistory` (the §1 measurement gate), `mode` (`separate` or `merged-into-lower`) | → Goal ($G^i_j$), → `improves` Harness ($H^i_{j-1}$), → Agent ($A^i_j$) | none |
-| **Agent** $A^i_j$ | **reuse `tapestry team`** plus an IH section | `role` (PM, Rung Manager, reviewer…), `model`, `account` | → Harness it runs, → Rung | `repository` (agent definition file); `web-address` for an external model |
+| **Agent** $A^i_j$ | new `ih agent` (not `tapestry team`; see §2 and §7) | `role` (PM, Rung Manager, reviewer…), `model`, `account` | → `runs` (Harness), → `rung` | `definition` (agent definition file); `web-address` for an external model |
 | **Skill** | new `ih skill` | `name`, `holdLevel` (the strictest consumer's, per lit. review §7), `provenIn` | → `usedBy` [Harness …] | `repository` (`SKILL.md` at a SHA) |
 | **HarnessChange** | new `ih harness change` (append-only) | `summary`, `why`, `origin`, **`prediction`** `{expect, atRisk, metric, horizon}`, `diffAudit` `{weakenedDefinitions, removedChecks, demotions}` | → `modifies` Harness, → `madeBy` Rung, → `touches` [Item …] | **evidence**: PR / commit `web-address` or `repository` locators |
 | **ChangeOutcome** | new `ih change outcome` (append-only) | `verdict` (`confirmed`, `refuted`, `reverted`, `inconclusive`), `before`, `after`, `observedOn` | → HarnessChange, → [Evaluation …] | evidence locators |
-| **HoldLevel** | new `ih hold level`, five fixed elements L0–L4 | `rank`, `name`, `whoMayChange`, `requires` (the table in `hold-axis.md` §3) | none | `repository` (`hold-axis.md` at a SHA) |
+| **HoldLevel** | new `ih hold level`, five fixed elements L0–L4 | `rank` (0–4), `label` (Locked, Sign-off, Reviewed, Disclosed, Free), `whoMayChange`, `requires` (the table in `hold-axis.md` §3) | none | `repository` (`hold-axis.md` at a SHA) |
 | **Item** | new `ih item` (a rule, check, definition or file placed on the axis) | `itemType`, `summary` (short; the text stays in git), `holdLevel` (**derived** from the latest valid Rating) | → Harness, → HoldLevel | `repository` locator with an anchor |
 | **Rating** | new `ih hold rating` (append-only) | `from`, `to`, `direction` (promote or demote), `reason`, `proposedBy` | → Item, → Ruling (required for a demotion) | none |
-| **Ruling** | new `ih ruling`, **owner-signed** (§6) | `decision` (approve or refuse), `reason` | → the Rating or HarnessChange it decides | none |
+| **Ruling** | new `ih ruling` (§6) | `decision` (approve or refuse), `reason`, `ruledBy`, `ruledOn` | → `decides`: the Rating or HarnessChange it decides | `evidence`: the git commit or PR where the ruling is recorded |
 | **Score** $S^i_j$ | new `ih score` | `name`, `method`, `heldOut` (bool), `direction` (higher or lower is better) | → Rung | `repository` (the script that computes it) |
 | **Evaluation** | new `ih evaluation` (append-only) | `value`, `n`, `measuredOn`, `window` | → Score, → Harness version or → HarnessChange | `web-address` (a `gh` run, a PR), `repository` (an output file) |
 
@@ -111,7 +113,7 @@ flowchart LR
   P -->|base harness| H0[ih harness H^i_0]
   R[ih rung j] -->|goal| GJ
   R -->|improves| H0
-  R -->|runs| A[tapestry team / agent A^i_j]
+  R -->|runs| A[ih agent A^i_j]
   H1[ih harness H^i_j] -->|rung| R
   C[ih harness change] -->|modifies| H0
   C -->|made by| R
@@ -122,7 +124,7 @@ flowchart LR
   S -->|belongs to| R
   I -->|holdLevel| L[ih hold level L0..L4]
   RT[ih hold rating] -->|re-rates| I
-  RU[ih ruling, owner-signed] -->|decides| RT
+  RU[ih ruling] -->|decides| RT
   K[ih skill] -->|used by| H0
   K -->|used by| H1
   H0 -.->|locator| GIT[(git: harness files @sha)]
@@ -133,9 +135,11 @@ flowchart LR
 
 Solid arrows are record-field links. Dotted arrows are pointers out of the graph.
 
+**Why a goal reuses `tapestry owner goal`.** On the local instance, an owner goal is the instance owner's goal, and the owner is Nous, while $G^i$ is David's. The concept's fields (statement, done means, stays inside, parent) fit $G^i$ exactly, so under principle 4 it is reused. If "a goal the owner holds" and "a goal a project serves" pull apart, it is the first candidate for a fork. The same goes for `tapestry external resource`: its identity rule ties each resource to exactly one goal, so IH records that are not goals carry their pointers as fields with the same vocabulary (`locatorKind`, `locator`) instead of as resource elements.
+
 ## 5. Instantiation examples
 
-These are illustrations of the shape. **Nothing was written.** Placeholders in angle brackets are values that are not known.
+These illustrate the shape. They were written before David's answers and nothing in this section was sent. Placeholders in angle brackets are values that are not known.
 
 **Physics, $P^1$** (facts from [`examples/physics.md`](examples/physics.md)):
 
@@ -159,21 +163,31 @@ These are illustrations of the shape. **Nothing was written.** Placeholders in a
 - For cross-fertilization, a future `ih skill` "literature review" (IH's own `docs/literature-review.md` method) would be `usedBy` the rung-1 harnesses of both $P^1$ and $P^2$. The query "skills used by more than one harness" is then a grouping over `usedBy`.
 - `ih evaluation` for "CI red rate" (`stack-free`), 2026-08-28 to 2026-09-27: 8 of 209 decided runs; evidence `gh run list --workflow test.yml`.
 
-What one element would look like, *if* it were created through the existing generic API. This is shown only to make the shape concrete; it was not sent.
+What one element looks like when created through the generic API. It follows the decisions in §7: links are addresses, and pointers pin a commit. The JSON section's key is the concept's primary-property key (`ihHarnessChange` for `ih harness change`), which is how `create-concept` names it. The d-tag is passed explicitly and equals what `create-element` would derive by default (`slug(name)-hash8(conceptAddress)`, `src/lib/dtag.js:51`), so a record's address is known before it is written. This example was not sent.
 
 ```json
-POST /api/normalize/create-element   (NOT EXECUTED)
+POST /api/normalize/create-element   (example; not sent)
 { "concept": "ih harness change",
   "name": "tapestry main-source-guard 2026-08-07",
+  "dTag": "tapestry-main-source-guard-2026-08-07-<hash8>",
   "json": { "ihHarnessChange": {
-      "harness": "tapestry-h0", "madeBy": "tapestry-rung-1",
+      "name": "tapestry main-source-guard 2026-08-07",
+      "slug": "tapestry-main-source-guard-2026-08-07",
+      "description": "PRs into main only from staging, promote/*, hotfix/*",
+      "modifies": "39999:<TA pubkey>:<d-tag of the H^2_0 record>",
+      "madeBy": "39999:<TA pubkey>:<d-tag of the tapestry rung-1 record>",
       "summary": "PRs into main only from staging, promote/*, hotfix/*",
       "why": "PR #446 bypassed staging (workflow comment)",
       "prediction": { "expect": "no feature-branch PR merges into main",
                       "metric": "main-source-guard failures; non-allowed heads merged",
                       "horizon": "rolling", "retrofitted": true },
       "evidence": [ { "locatorKind": "web-address",
-                      "locator": "https://github.com/nous-clawds4/tapestry/pull/517" } ] } } }
+                      "locator": "https://github.com/nous-clawds4/tapestry/pull/517" },
+                    { "locatorKind": "repository",
+                      "locator": "github.com/nous-clawds4/tapestry@1e518034a9e0277a79d27747bb26ece59c55023d:.github/workflows/guard-main-source.yml",
+                      "repo": "nous-clawds4/tapestry", "branch": "main",
+                      "commit": "1e518034a9e0277a79d27747bb26ece59c55023d",
+                      "path": ".github/workflows/guard-main-source.yml" } ] } } }
 ```
 
 A purpose-built `ih` write endpoint, like the second brain's, would be better than `create-element`. It could refuse a HarnessChange with no prediction, a demotion with no Ruling, or a duplicate locator, as `create-resource` refuses today.
@@ -189,26 +203,34 @@ A purpose-built `ih` write endpoint, like the second brain's, would be better th
 - `approve-proposal` has the same gate (`src/api/normalize/index.js:3266-3270`).
 - So a TA-signed "approval" proves only that *something local* wrote it. This is the brainstorm-harness weakness in another form: `bin/rule`'s TTY-plus-"owner" gate is, in its own words, "not cryptographic" (`assessments/brainstorm-harness.md` §2).
 
-**Proposal: owner rulings as owner-signed events.**
+**Decision: L0 stays in git; the graph is the record, not the lock** (David, 2026-09-27, answer 3). The local instance is an R&D instance owned by Nous, so IH records there are signed with the instance's TA key, and David's personal key is not required. The graph therefore cannot prove who approved a demotion, and it does not try to. Enforcement lives where it already lives: the L0 and L1 items are files in the IH repo, and a change to them is a git commit that David makes or signs off. An `ih ruling` element records that decision and points at the commit or PR where it was made (its `evidence` pointer), so a reader who doubts a ruling checks git, not the signature.
 
-- **How a ruling is made.** An `ih ruling` for anything at L0–L1, or anything touching a goal, is a kind-39999 event signed with **David's own key** through NIP-07 in the browser. It is published client-signed through `POST /api/strfry/publish`, which verifies the signature but gates nothing else (`publishEvent.js:74-92`). The owner's key is "never held server-side" (`BIBLE.md` §31), so no agent on the machine can forge one.
-- **How readers treat it.** A reader accepts a demotion only if a matching Ruling exists with `pubkey == OWNER_PUBKEY`. Promotions need no ruling. That is the asymmetry rule of `hold-axis.md` §4, made cryptographic.
-- **The re-rating rule itself** is an Item at L0 whose only valid Ratings are owner-signed.
-- **The shape already exists.** `GET /api/brain/direction/:slug` computes an owner-ratified anchor from approved proposal facts and "fails CLOSED" on anything unjudged or unknowable (Tapestry `engineering-team/CHANGELOG.md`, 2026-07-26). An `ih` read that refuses rather than blesses would follow the same pattern.
+**Kept for later: owner-signed rulings.** On an instance where David is the Owner, a stronger form is available without new server code. An `ih ruling` would be a kind-39999 event signed with the Owner's key through NIP-07 and published client-signed through `POST /api/strfry/publish`, which verifies the signature but gates nothing else (`publishEvent.js:74-92`). Readers would accept a demotion only if a matching Ruling has `pubkey == OWNER_PUBKEY`, which is the asymmetry rule of `hold-axis.md` §4 made cryptographic. `GET /api/brain/direction/:slug`, which "fails CLOSED" on anything unjudged (Tapestry `engineering-team/CHANGELOG.md`, 2026-07-26), is the pattern such a reader would follow. Two costs keep this on the shelf: client-signed events land in strfry but are not imported into Neo4j at publish time (`BIBLE.md` §6, §31), and nothing on the local instance needs it.
 
-**Caveats.** Client-signed events land in strfry. Today only the instance's own tapestry letters are imported into Neo4j at publish time (`BIBLE.md` §6 "Graph-embedding convention", §31 "Ruling"). So an IH reader would query strfry by `#z` and `authors`, or Tapestry would need an import path for owner-signed IH events. There is also a privacy risk. If the `dcosl` router preset (both directions, kinds 39998/39999) is ever enabled, locally stored IH events would be mirrored to public relays (`BIBLE.md` §14 "Router Presets"). IH data from private repos should never ride that stream **(inference about intent; the preset defaults to disabled)**.
+**Relay privacy.** Normalize writes are local: `publishToStrfry` pipes the event to `strfry import` (`src/api/normalize/index.js:115`), and nothing in the handler publishes outward. The one server-side path to public relays is the strfry router, whose streams are listed by `GET /api/strfry/router-status` and written to `/etc/strfry-router-tapestry.config` (`src/api/strfry/routerStatus.js`, `routerConfig.js`). If the `dcosl` preset (both directions, kinds 9998/9999/39998/39999) were enabled, IH events would be mirrored to public relays (`BIBLE.md` §14 "Router Presets"). §7, decision C sets the rule every IH writer follows.
 
-## 7. Open questions for David
+## 7. David's answers and the CoS's decisions (2026-09-27)
 
-1. **Namespace.** Reuse your second-brain concepts (`tapestry owner goal`, `tapestry external resource`, `tapestry team`, `tapestry proposal`, `tapestry work record`) for IH, or keep IH entirely in `ih *` concepts? Reuse gets the UI and validation for free, but mixes IH with personal goals. It also inherits the one-goal-per-resource rule.
-2. **Your hand-made concepts.** Are `tapestry team`, `tapestry executive action`, `tapestry privacy level` and `maturational state of a concept` meant to be the home for agents, harnesses and loops? I read only their descriptions, not their elements.
-3. **Who writes.** An owner session in the browser, `docker exec` loopback calls (owner-equivalent, as brainstorm-harness does), or a new, narrower agent endpoint?
-4. **Owner-signed rulings.** Will you sign L0/L1 rulings with NIP-07? Should Tapestry import owner-signed IH events into Neo4j, or should readers use strfry?
-5. **Edges.** Record fields only (v1), pointer-typed `b` tags once `set-b-tag` lands (PR #759 would first need retargeting to `staging`), or a relationship-whitelist extension?
-6. **Locators.** Is `repository` + `github.com/<owner>/<repo>@<sha>:<path>` the right convention? Should the graph pin SHAs (auditable) or track branches (always current)?
-7. **Privacy.** Should IH data ever leave the machine? Would `tapestry privacy level` apply to it?
-8. **Reproducibility.** Should the IH repo carry a small JSON export of the IH graph, so that git remains the audit trail for the structure too?
+David answered at 6:55 PM ET on 2026-09-27. His four answers are summarised first, then the decisions he delegated to the CoS. The eight open questions this section used to hold are all resolved here; the last list says where each one went.
+
+**David's answers.**
+
+1. **$G^2$ covers every kind of instance.** Anyone can run a Tapestry instance: an individual for personal use, a community leader whose "customers" are the members of the community, or an enterprise such as NosFabrica running it as a service that will be an alternative to Google search in at least some contexts. The ladder must understand and protect all of these use cases. [`examples/tapestry.md`](examples/tapestry.md) now states $G^2$ that way.
+2. **Reuse concepts wherever it makes sense.** Reuse is encouraged. The concept graph will ultimately support forking a concept into two or more distinct concepts when use cases are not well aligned (principle 4).
+3. **Each instance has an Owner, and the local instance is R&D.** David owns tapestry.brainstorm.world and staging.brainstorm.world; Nous owns the local instance. Signing IH records with the instance key is acceptable there, and David's personal key is not required. L0 protection stays in git (§6).
+4. **Leave the four July concepts alone.** `tapestry team`, `tapestry executive action`, `tapestry privacy level` and `maturational state of a concept` were authored by Nous' Tapestry Assistant in July, probably for the dormant Goals feature. IH does not reuse them. Agents get their own concept, `ih agent`.
+
+**Decisions delegated to the CoS.**
+
+- **A. Links are fields holding addresses.** A link is a field in the record's JSON section whose value is the target's full address (`39999:<pubkey>:<d-tag>`, or `39998:<pubkey>:<d-tag>` for a concept). A field that can name several targets holds an array of addresses. An address is what Neo4j stores as `uuid`, so a reader can join on it directly, and unlike a slug it is unique across concepts and authors. IH writes pass an explicit d-tag equal to `create-element`'s default derivation, so an address is known before the record is written and two records can point at each other. The model does not depend on PR #759 or on `set-b-tag`. If pointer-typed `b` tags land later, they may be added alongside the fields, and the fields stay authoritative.
+- **B. Pointers pin a commit and record the branch.** A pointer into git is an object: `{ "locatorKind": "repository", "locator": "github.com/<owner>/<repo>@<full sha>:<path>[#anchor]", "repo": "<owner>/<repo>", "branch": "<branch>", "commit": "<full sha>", "path": "<path>" }`. The `locator` string alone is enough to resolve it; the other fields make it readable and queryable. `branch` records which line of history the commit was read from and is never used to resolve the pointer. Pointers of other kinds (`web-address`, `nostr-event`) use the same object with only `locatorKind` and `locator`.
+- **C. Relay privacy is confirmed before every write.** An IH writer refuses to write unless it confirms, in the same run and immediately before writing, that: the `dcosl` preset is present and disabled; no enabled stream with direction `up` or `both`, in either the router state or the router config file, has a filter that could match an IH event (by kind, author or tag); and no `strfry sync` with direction `up` or `both` is running or scheduled. If any of this cannot be read, the writer treats it as a failure and writes nothing. IH data stays on the machine.
+- **D. The IH repo keeps a JSON export of the graph.** A `graph/` folder in this repo holds a JSON export of every IH concept and element on the instance, regenerated after each batch of writes, with the instance, the TA pubkey, the date and the commits the pointers were pinned to. Git then remains the audit trail for the graph's structure as well as its text, and another instance can recreate the IH graph from the export.
+- **E. Who writes, for now.** A CoS script run on David's Mac calls the normalize API over the container's loopback (`docker exec tapestry …`), which `auth.js` treats as the Owner (`src/middleware/auth.js`, the `isDirectLocal` branch). `create-concept`'s own duplicate check compares against a double-encoded pubkey (the comment at `src/api/normalize/index.js:1255-1259` names the double encoding), so by my reading of the code it cannot match an existing header, so the script checks for existing concepts itself and skips them. A purpose-built `ih` endpoint that refuses a HarnessChange without a prediction, or a demotion without a Ruling, is still the better long-term shape; it would be a Tapestry change and go through Tapestry's own harness.
+
+**Where the old open questions went.** Namespace (old 1): answer 2 and principle 4. The July concepts (old 2): answer 4. Who writes (old 3): decision E. Owner-signed rulings (old 4): answer 3 and §6, kept for later. Edges (old 5): decision A. Locators (old 6): decision B. Privacy (old 7): decision C; `tapestry privacy level` is not used (answer 4). Reproducibility (old 8): decision D.
 
 ## Changelog
 
 - 2026-09-27: created by the CoS (L3, proposal).
+- 2026-09-27 (evening): revised by the CoS (L3) after David's answers of 6:55 PM ET. Added the instance-and-owner model to §1. Corrected §2: the four July concepts were authored by Nous' Tapestry Assistant, not by David, and are no longer reused. Rewrote §3 around reuse by default (with forking), address-valued links and commit-pinned pointers. In §4, replaced `tapestry team` with a new `ih agent` concept, dropped the owner-signed requirement from `ih ruling`, and explained why `tapestry owner goal` is still reused. Updated the §5 example to the new link and pointer shapes. Rewrote §6: L0 stays in git, TA signing is acceptable on the local R&D instance, owner-signed rulings are kept for later, and relay privacy is spelled out. Replaced the §7 open questions with David's answers and the CoS's decisions A–E.
