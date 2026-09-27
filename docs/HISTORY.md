@@ -18,3 +18,7 @@ Changes made to the snapshot before the first public commit:
 - This file was added.
 
 `README.md` is unchanged.
+
+## Goal protection, 2026-09-27
+
+Once the repository was public, GitHub rulesets became available. `.github/CODEOWNERS` assigns `@wds4` (David) as code owner of `README.md` (the goal, L0), `docs/hold-axis.md` (holds the L0 re-rating rule) and `.github/CODEOWNERS` itself. A ruleset on `main` requires a pull request, requires review from Code Owners (with zero general approvals), blocks force pushes and deletion, and has no bypass actors. So changes to the goal or the L0 rule need David's approval, while ordinary L3 docs can still be merged by the CoS. This only strengthens holds, so under `docs/hold-axis.md` §4 it needs no approval from above.
