@@ -23,7 +23,7 @@ We don't launch new rungs willy nilly. The CoS and the Project Manager for any g
 
 # Infinite Ladder for the Infinite Ladder
 
-The Infinite Ladder is its own project. We will define it as the first (so $i = 0$) project, $P^i_0$. The CoS is the Agent / Project Manager $A^i_0$ for $P^i_0$. The purpose of this repository is to build the baseline of the infinite harness, $H^i_0$.
+The Infinite Ladder is its own project. We will define it as the first (so $i = 0$) project, $P^0$, with subsequent Projects designated with superscripts $1, 2, 3, ...$: $P^1, P^2, P^3, ...$. The CoS is the Agent / Project Manager $A^i_0$ for $P^i_0$. The purpose of this repository is to build the baseline of the infinite harness, $H^i_0$.
 
 # Duties of the CoS
 
