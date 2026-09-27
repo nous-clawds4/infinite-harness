@@ -1,0 +1,751 @@
+{
+  "date": "2026-09-27",
+  "machine": "David's Mac (Ws-Mac-Studio)",
+  "runner": "docker exec -i -e IH_MODE=<mode> tapestry node - < ~/cos-ih/ih-seed.js",
+  "runs": [
+    {
+      "mode": "dry-run",
+      "time": "about 7:03 PM ET",
+      "digest": {
+        "mode": "dry-run",
+        "aborted": null,
+        "instance": {
+          "ok": true,
+          "taPubkey": "11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767",
+          "conceptCount": 63
+        },
+        "endpointsOk": true,
+        "relay": {
+          "ok": true,
+          "dcosl": {
+            "enabled": false,
+            "dir": "both",
+            "urls": [
+              "wss://dcosl.brainstorm.world",
+              "wss://dcosl.brainstorm.social/relay"
+            ]
+          },
+          "problems": [],
+          "outbound": [
+            "state:WoT:both:excluded(kinds exclude 39998/39999)",
+            "state:trustedAssertions:up:excluded(kinds exclude 39998/39999)",
+            "state:tag:both:excluded(#z limited to non-IH concepts)",
+            "state:nostrUserTag:both:excluded(#z limited to non-IH concepts)",
+            "state:tagPinning:both:excluded(#z limited to non-IH concepts)",
+            "state:taggingWithSpecificTag:both:excluded(#z limited to non-IH concepts)",
+            "state:nostrEventTag:both:excluded(#z limited to non-IH concepts)",
+            "config:WoT:both:excluded(kinds exclude 39998/39999)",
+            "config:trustedAssertions:up:excluded(kinds exclude 39998/39999)",
+            "config:tag:both:excluded(#z limited to non-IH concepts)",
+            "config:nostrUserTag:both:excluded(#z limited to non-IH concepts)",
+            "config:tagPinning:both:excluded(#z limited to non-IH concepts)",
+            "config:taggingWithSpecificTag:both:excluded(#z limited to non-IH concepts)",
+            "config:nostrEventTag:both:excluded(#z limited to non-IH concepts)"
+          ],
+          "notes": [
+            "cron lines inspected: 5; processes inspected: 14; strfry router running: true"
+          ]
+        },
+        "plan": {
+          "conceptsToCreate": 13,
+          "conceptsExisting": 0,
+          "elementsToCreate": 9,
+          "elementsExisting": 0
+        },
+        "created": {
+          "concepts": 0,
+          "schemas": 0,
+          "elements": 0
+        },
+        "skipped": {
+          "concepts": 0,
+          "elements": 0
+        },
+        "failures": [],
+        "reused": [
+          {
+            "name": "tapestry owner goal",
+            "present": true,
+            "address": "39998:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:tapestry-owner-goal",
+            "elements": 35
+          },
+          {
+            "name": "tapestry external resource",
+            "present": true,
+            "address": "39998:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:tapestry-external-resource",
+            "elements": 0
+          },
+          {
+            "name": "tapestry proposal",
+            "present": true,
+            "address": "39998:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:tapestry-proposal",
+            "elements": 10
+          },
+          {
+            "name": "tapestry work record",
+            "present": true,
+            "address": "39998:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:tapestry-work-record",
+            "elements": 8
+          }
+        ],
+        "notReusedPresent": [
+          {
+            "name": "tapestry team",
+            "present": true
+          },
+          {
+            "name": "tapestry executive action",
+            "present": true
+          },
+          {
+            "name": "tapestry privacy level",
+            "present": true
+          },
+          {
+            "name": "maturational state of a concept",
+            "present": true
+          }
+        ]
+      }
+    },
+    {
+      "mode": "write",
+      "time": "7:03 PM ET",
+      "log": [
+        "mode=write base=http://127.0.0.1:7778",
+        "create-concept ih project",
+        "save-schema ih project",
+        "create-concept ih harness",
+        "save-schema ih harness",
+        "create-concept ih rung",
+        "save-schema ih rung",
+        "create-concept ih agent",
+        "save-schema ih agent",
+        "create-concept ih skill",
+        "save-schema ih skill",
+        "create-concept ih harness change",
+        "save-schema ih harness change",
+        "create-concept ih change outcome",
+        "save-schema ih change outcome",
+        "create-concept ih hold level",
+        "save-schema ih hold level",
+        "create-concept ih item",
+        "save-schema ih item",
+        "create-concept ih hold rating",
+        "save-schema ih hold rating",
+        "create-concept ih ruling",
+        "save-schema ih ruling",
+        "create-concept ih score",
+        "save-schema ih score",
+        "create-concept ih evaluation",
+        "save-schema ih evaluation",
+        "create-element ih hold level / L0 Locked",
+        "create-element ih hold level / L1 Sign-off",
+        "create-element ih hold level / L2 Reviewed",
+        "create-element ih hold level / L3 Disclosed",
+        "create-element ih hold level / L4 Free",
+        "create-element ih harness / H1_0 physics base harness",
+        "create-element ih harness / H2_0 tapestry base harness",
+        "create-element ih project / P1 physics",
+        "create-element ih project / P2 tapestry"
+      ],
+      "digest": {
+        "mode": "write",
+        "aborted": null,
+        "instance": {
+          "ok": true,
+          "taPubkey": "11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767",
+          "conceptCount": 63
+        },
+        "endpointsOk": true,
+        "relay": {
+          "ok": true,
+          "dcosl": {
+            "enabled": false,
+            "dir": "both",
+            "urls": [
+              "wss://dcosl.brainstorm.world",
+              "wss://dcosl.brainstorm.social/relay"
+            ]
+          },
+          "problems": [],
+          "outbound": [
+            "state:WoT:both:excluded(kinds exclude 39998/39999)",
+            "state:trustedAssertions:up:excluded(kinds exclude 39998/39999)",
+            "state:tag:both:excluded(#z limited to non-IH concepts)",
+            "state:nostrUserTag:both:excluded(#z limited to non-IH concepts)",
+            "state:tagPinning:both:excluded(#z limited to non-IH concepts)",
+            "state:taggingWithSpecificTag:both:excluded(#z limited to non-IH concepts)",
+            "state:nostrEventTag:both:excluded(#z limited to non-IH concepts)",
+            "config:WoT:both:excluded(kinds exclude 39998/39999)",
+            "config:trustedAssertions:up:excluded(kinds exclude 39998/39999)",
+            "config:tag:both:excluded(#z limited to non-IH concepts)",
+            "config:nostrUserTag:both:excluded(#z limited to non-IH concepts)",
+            "config:tagPinning:both:excluded(#z limited to non-IH concepts)",
+            "config:taggingWithSpecificTag:both:excluded(#z limited to non-IH concepts)",
+            "config:nostrEventTag:both:excluded(#z limited to non-IH concepts)"
+          ],
+          "notes": [
+            "cron lines inspected: 5; processes inspected: 14; strfry router running: true"
+          ]
+        },
+        "plan": {
+          "conceptsToCreate": 13,
+          "conceptsExisting": 0,
+          "elementsToCreate": 9,
+          "elementsExisting": 0
+        },
+        "created": {
+          "concepts": 13,
+          "schemas": 13,
+          "elements": 9
+        },
+        "skipped": {
+          "concepts": 0,
+          "elements": 0
+        },
+        "failures": [],
+        "reused": [
+          {
+            "name": "tapestry owner goal",
+            "present": true,
+            "address": "39998:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:tapestry-owner-goal",
+            "elements": 35
+          },
+          {
+            "name": "tapestry external resource",
+            "present": true,
+            "address": "39998:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:tapestry-external-resource",
+            "elements": 0
+          },
+          {
+            "name": "tapestry proposal",
+            "present": true,
+            "address": "39998:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:tapestry-proposal",
+            "elements": 10
+          },
+          {
+            "name": "tapestry work record",
+            "present": true,
+            "address": "39998:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:tapestry-work-record",
+            "elements": 8
+          }
+        ],
+        "notReusedPresent": [
+          {
+            "name": "tapestry team",
+            "present": true
+          },
+          {
+            "name": "tapestry executive action",
+            "present": true
+          },
+          {
+            "name": "tapestry privacy level",
+            "present": true
+          },
+          {
+            "name": "maturational state of a concept",
+            "present": true
+          }
+        ]
+      },
+      "note": "This run's stdout summary was truncated at 64 KB because the script exited before a piped stdout flushed; the stderr log and digest above are complete. The script was fixed (exit after flush) before the export run."
+    },
+    {
+      "mode": "export",
+      "time": "2026-09-27T23:04:06.166Z (UTC)",
+      "checks": {
+        "instance": {
+          "ok": true,
+          "taPubkey": "11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767",
+          "conceptCount": 76
+        },
+        "endpoints": {
+          "/api/normalize/create-concept": {
+            "status": 400,
+            "error": "Concept name is required",
+            "ok": true
+          },
+          "/api/normalize/save-schema": {
+            "status": 400,
+            "error": "Missing concept name",
+            "ok": true
+          },
+          "/api/normalize/create-element": {
+            "status": 400,
+            "error": "Missing concept name",
+            "ok": true
+          }
+        },
+        "relayPrivacy": {
+          "ok": true,
+          "problems": [],
+          "notes": [
+            "cron lines inspected: 5; processes inspected: 14; strfry router running: true"
+          ],
+          "routerProcess": {
+            "status": "running",
+            "uptime": "30"
+          },
+          "dcoslPreset": {
+            "enabled": false,
+            "dir": "both",
+            "urls": [
+              "wss://dcosl.brainstorm.world",
+              "wss://dcosl.brainstorm.social/relay"
+            ]
+          },
+          "outboundStreams": [
+            {
+              "source": "state",
+              "name": "WoT",
+              "dir": "both",
+              "urls": [
+                "wss://wot.grapevine.network"
+              ],
+              "filter": {
+                "kinds": [
+                  3,
+                  1984,
+                  10000
+                ],
+                "limit": 5
+              },
+              "couldCarryIH": false,
+              "why": "kinds exclude 39998/39999"
+            },
+            {
+              "source": "state",
+              "name": "trustedAssertions",
+              "dir": "up",
+              "urls": [
+                "wss://nip85.brainstorm.world"
+              ],
+              "filter": {
+                "kinds": [
+                  30382
+                ],
+                "limit": 5
+              },
+              "couldCarryIH": false,
+              "why": "kinds exclude 39998/39999"
+            },
+            {
+              "source": "state",
+              "name": "tag",
+              "dir": "both",
+              "urls": [
+                "wss://dcosl.brainstorm.world"
+              ],
+              "filter": {
+                "kinds": [
+                  39999
+                ],
+                "limit": 5,
+                "#z": [
+                  "39998:82b75e474dda005e912bcbb910391c60c2b89cc7faf5d3c30b7c59a324973833:tag"
+                ]
+              },
+              "couldCarryIH": false,
+              "why": "#z limited to non-IH concepts"
+            },
+            {
+              "source": "state",
+              "name": "nostrUserTag",
+              "dir": "both",
+              "urls": [
+                "wss://dcosl.brainstorm.world"
+              ],
+              "filter": {
+                "kinds": [
+                  39999
+                ],
+                "limit": 5,
+                "#z": [
+                  "39998:82b75e474dda005e912bcbb910391c60c2b89cc7faf5d3c30b7c59a324973833:nostr-user-tag"
+                ]
+              },
+              "couldCarryIH": false,
+              "why": "#z limited to non-IH concepts"
+            },
+            {
+              "source": "state",
+              "name": "tagPinning",
+              "dir": "both",
+              "urls": [
+                "wss://dcosl.brainstorm.world"
+              ],
+              "filter": {
+                "kinds": [
+                  39999
+                ],
+                "limit": 5,
+                "#z": [
+                  "39998:82b75e474dda005e912bcbb910391c60c2b89cc7faf5d3c30b7c59a324973833:tag-pinning"
+                ]
+              },
+              "couldCarryIH": false,
+              "why": "#z limited to non-IH concepts"
+            },
+            {
+              "source": "state",
+              "name": "taggingWithSpecificTag",
+              "dir": "both",
+              "urls": [
+                "wss://dcosl.brainstorm.world"
+              ],
+              "filter": {
+                "kinds": [
+                  39999
+                ],
+                "limit": 5,
+                "#z": [
+                  "39998:82b75e474dda005e912bcbb910391c60c2b89cc7faf5d3c30b7c59a324973833:tagging-with-specific-tag"
+                ]
+              },
+              "couldCarryIH": false,
+              "why": "#z limited to non-IH concepts"
+            },
+            {
+              "source": "state",
+              "name": "nostrEventTag",
+              "dir": "both",
+              "urls": [
+                "wss://dcosl.brainstorm.world"
+              ],
+              "filter": {
+                "kinds": [
+                  39999
+                ],
+                "limit": 5,
+                "#z": [
+                  "39998:82b75e474dda005e912bcbb910391c60c2b89cc7faf5d3c30b7c59a324973833:nostr-event-tag"
+                ]
+              },
+              "couldCarryIH": false,
+              "why": "#z limited to non-IH concepts"
+            },
+            {
+              "source": "config",
+              "name": "WoT",
+              "dir": "both",
+              "urls": [
+                "wss://wot.grapevine.network"
+              ],
+              "filter": {
+                "kinds": [
+                  3,
+                  1984,
+                  10000
+                ],
+                "limit": 5
+              },
+              "couldCarryIH": false,
+              "why": "kinds exclude 39998/39999"
+            },
+            {
+              "source": "config",
+              "name": "trustedAssertions",
+              "dir": "up",
+              "urls": [
+                "wss://nip85.brainstorm.world"
+              ],
+              "filter": {
+                "kinds": [
+                  30382
+                ],
+                "limit": 5
+              },
+              "couldCarryIH": false,
+              "why": "kinds exclude 39998/39999"
+            },
+            {
+              "source": "config",
+              "name": "tag",
+              "dir": "both",
+              "urls": [
+                "wss://dcosl.brainstorm.world"
+              ],
+              "filter": {
+                "kinds": [
+                  39999
+                ],
+                "limit": 5,
+                "#z": [
+                  "39998:82b75e474dda005e912bcbb910391c60c2b89cc7faf5d3c30b7c59a324973833:tag"
+                ]
+              },
+              "couldCarryIH": false,
+              "why": "#z limited to non-IH concepts"
+            },
+            {
+              "source": "config",
+              "name": "nostrUserTag",
+              "dir": "both",
+              "urls": [
+                "wss://dcosl.brainstorm.world"
+              ],
+              "filter": {
+                "kinds": [
+                  39999
+                ],
+                "limit": 5,
+                "#z": [
+                  "39998:82b75e474dda005e912bcbb910391c60c2b89cc7faf5d3c30b7c59a324973833:nostr-user-tag"
+                ]
+              },
+              "couldCarryIH": false,
+              "why": "#z limited to non-IH concepts"
+            },
+            {
+              "source": "config",
+              "name": "tagPinning",
+              "dir": "both",
+              "urls": [
+                "wss://dcosl.brainstorm.world"
+              ],
+              "filter": {
+                "kinds": [
+                  39999
+                ],
+                "limit": 5,
+                "#z": [
+                  "39998:82b75e474dda005e912bcbb910391c60c2b89cc7faf5d3c30b7c59a324973833:tag-pinning"
+                ]
+              },
+              "couldCarryIH": false,
+              "why": "#z limited to non-IH concepts"
+            },
+            {
+              "source": "config",
+              "name": "taggingWithSpecificTag",
+              "dir": "both",
+              "urls": [
+                "wss://dcosl.brainstorm.world"
+              ],
+              "filter": {
+                "kinds": [
+                  39999
+                ],
+                "limit": 5,
+                "#z": [
+                  "39998:82b75e474dda005e912bcbb910391c60c2b89cc7faf5d3c30b7c59a324973833:tagging-with-specific-tag"
+                ]
+              },
+              "couldCarryIH": false,
+              "why": "#z limited to non-IH concepts"
+            },
+            {
+              "source": "config",
+              "name": "nostrEventTag",
+              "dir": "both",
+              "urls": [
+                "wss://dcosl.brainstorm.world"
+              ],
+              "filter": {
+                "kinds": [
+                  39999
+                ],
+                "limit": 5,
+                "#z": [
+                  "39998:82b75e474dda005e912bcbb910391c60c2b89cc7faf5d3c30b7c59a324973833:nostr-event-tag"
+                ]
+              },
+              "couldCarryIH": false,
+              "why": "#z limited to non-IH concepts"
+            }
+          ]
+        },
+        "reusedConcepts": [
+          {
+            "name": "tapestry owner goal",
+            "present": true,
+            "address": "39998:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:tapestry-owner-goal",
+            "elements": 35
+          },
+          {
+            "name": "tapestry external resource",
+            "present": true,
+            "address": "39998:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:tapestry-external-resource",
+            "elements": 0
+          },
+          {
+            "name": "tapestry proposal",
+            "present": true,
+            "address": "39998:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:tapestry-proposal",
+            "elements": 10
+          },
+          {
+            "name": "tapestry work record",
+            "present": true,
+            "address": "39998:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:tapestry-work-record",
+            "elements": 8
+          }
+        ],
+        "notReused": [
+          {
+            "name": "tapestry team",
+            "present": true
+          },
+          {
+            "name": "tapestry executive action",
+            "present": true
+          },
+          {
+            "name": "tapestry privacy level",
+            "present": true
+          },
+          {
+            "name": "maturational state of a concept",
+            "present": true
+          }
+        ]
+      },
+      "plan": {
+        "concepts": [
+          {
+            "name": "ih project",
+            "action": "skip-exists",
+            "address": "39998:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:ih-project",
+            "schema": "check"
+          },
+          {
+            "name": "ih harness",
+            "action": "skip-exists",
+            "address": "39998:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:ih-harness",
+            "schema": "check"
+          },
+          {
+            "name": "ih rung",
+            "action": "skip-exists",
+            "address": "39998:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:ih-rung",
+            "schema": "check"
+          },
+          {
+            "name": "ih agent",
+            "action": "skip-exists",
+            "address": "39998:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:ih-agent",
+            "schema": "check"
+          },
+          {
+            "name": "ih skill",
+            "action": "skip-exists",
+            "address": "39998:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:ih-skill",
+            "schema": "check"
+          },
+          {
+            "name": "ih harness change",
+            "action": "skip-exists",
+            "address": "39998:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:ih-harness-change",
+            "schema": "check"
+          },
+          {
+            "name": "ih change outcome",
+            "action": "skip-exists",
+            "address": "39998:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:ih-change-outcome",
+            "schema": "check"
+          },
+          {
+            "name": "ih hold level",
+            "action": "skip-exists",
+            "address": "39998:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:ih-hold-level",
+            "schema": "check"
+          },
+          {
+            "name": "ih item",
+            "action": "skip-exists",
+            "address": "39998:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:ih-item",
+            "schema": "check"
+          },
+          {
+            "name": "ih hold rating",
+            "action": "skip-exists",
+            "address": "39998:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:ih-hold-rating",
+            "schema": "check"
+          },
+          {
+            "name": "ih ruling",
+            "action": "skip-exists",
+            "address": "39998:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:ih-ruling",
+            "schema": "check"
+          },
+          {
+            "name": "ih score",
+            "action": "skip-exists",
+            "address": "39998:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:ih-score",
+            "schema": "check"
+          },
+          {
+            "name": "ih evaluation",
+            "action": "skip-exists",
+            "address": "39998:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:ih-evaluation",
+            "schema": "check"
+          }
+        ],
+        "elements": [
+          {
+            "concept": "ih hold level",
+            "name": "L0 Locked",
+            "address": "39999:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:l0-locked-f2d8ac29",
+            "action": "skip-exists"
+          },
+          {
+            "concept": "ih hold level",
+            "name": "L1 Sign-off",
+            "address": "39999:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:l1-sign-off-f2d8ac29",
+            "action": "skip-exists"
+          },
+          {
+            "concept": "ih hold level",
+            "name": "L2 Reviewed",
+            "address": "39999:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:l2-reviewed-f2d8ac29",
+            "action": "skip-exists"
+          },
+          {
+            "concept": "ih hold level",
+            "name": "L3 Disclosed",
+            "address": "39999:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:l3-disclosed-f2d8ac29",
+            "action": "skip-exists"
+          },
+          {
+            "concept": "ih hold level",
+            "name": "L4 Free",
+            "address": "39999:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:l4-free-f2d8ac29",
+            "action": "skip-exists"
+          },
+          {
+            "concept": "ih harness",
+            "name": "H1_0 physics base harness",
+            "address": "39999:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:h1-0-physics-base-harness-f29105b5",
+            "action": "skip-exists"
+          },
+          {
+            "concept": "ih harness",
+            "name": "H2_0 tapestry base harness",
+            "address": "39999:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:h2-0-tapestry-base-harness-f29105b5",
+            "action": "skip-exists"
+          },
+          {
+            "concept": "ih project",
+            "name": "P1 physics",
+            "address": "39999:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:p1-physics-1b960bd8",
+            "action": "skip-exists"
+          },
+          {
+            "concept": "ih project",
+            "name": "P2 tapestry",
+            "address": "39999:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:p2-tapestry-1b960bd8",
+            "action": "skip-exists"
+          }
+        ],
+        "counts": {
+          "conceptsToCreate": 0,
+          "conceptsExisting": 13,
+          "elementsToCreate": 0,
+          "elementsExisting": 9
+        }
+      }
+    }
+  ]
+}

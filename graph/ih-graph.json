@@ -1,0 +1,1916 @@
+{
+  "format": "ih-graph-export/1",
+  "generatedAt": "2026-09-27T23:04:06.615Z",
+  "generatedBy": "graph/tools/ih-seed.js (IH_MODE=export), run inside the tapestry container on David's Mac",
+  "instance": {
+    "url": "http://localhost:7778",
+    "owner": "Nous",
+    "role": "R&D (one of several R&D instances)",
+    "taPubkey": "11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767"
+  },
+  "model": "github.com/nous-clawds4/infinite-harness@5d603359db3239aae890dbf2e9c5888e6d39a146:docs/tapestry-concept-model.md",
+  "pinnedCommits": {
+    "nous-clawds4/infinite-harness": "5d603359db3239aae890dbf2e9c5888e6d39a146",
+    "nous-clawds4/tapestry": "1e518034a9e0277a79d27747bb26ece59c55023d",
+    "nous-clawds4/physics": "953db3b59cf420c297a2dba18ce5b19f0d81469a"
+  },
+  "conventions": {
+    "links": "fields holding the target's full address (decision A)",
+    "pointers": "locatorKind + locator pinned to a commit, branch recorded for readability (decision B)",
+    "elementDTag": "slug(name)-hash8(conceptAddress), passed explicitly"
+  },
+  "reusedConcepts": [
+    {
+      "name": "tapestry owner goal",
+      "address": "39998:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:tapestry-owner-goal",
+      "elementsAtExport": 35
+    },
+    {
+      "name": "tapestry external resource",
+      "address": "39998:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:tapestry-external-resource",
+      "elementsAtExport": 0
+    },
+    {
+      "name": "tapestry proposal",
+      "address": "39998:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:tapestry-proposal",
+      "elementsAtExport": 10
+    },
+    {
+      "name": "tapestry work record",
+      "address": "39998:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:tapestry-work-record",
+      "elementsAtExport": 8
+    }
+  ],
+  "concepts": [
+    {
+      "name": "ih agent",
+      "address": "39998:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:ih-agent",
+      "description": "An agent A^i_j that runs a harness or a rung: a role such as PM, Rung Manager or reviewer, the model behind it and the account it acts as. Its definition lives elsewhere (an agent file in git, or an e",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "ihAgent": {
+            "type": "object",
+            "title": "Ih Agent",
+            "required": [
+              "name",
+              "slug",
+              "description"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "the record name"
+              },
+              "slug": {
+                "type": "string",
+                "description": "stable identity derived from the name"
+              },
+              "description": {
+                "type": "string",
+                "description": "a short description"
+              },
+              "role": {
+                "type": "string",
+                "description": "PM, Rung Manager, reviewer ..."
+              },
+              "model": {
+                "type": "string",
+                "description": "the model behind the agent"
+              },
+              "account": {
+                "type": "string",
+                "description": "the account it acts as"
+              },
+              "runs": {
+                "type": "string",
+                "description": "address of the linked record (39999:<pubkey>:<d-tag>)"
+              },
+              "rung": {
+                "type": "string",
+                "description": "address of the linked record (39999:<pubkey>:<d-tag>)"
+              },
+              "definition": {
+                "type": "object",
+                "description": "pointer out of the graph: locatorKind + locator, pinned to a commit for git (repo, branch, commit, path)",
+                "properties": {
+                  "locatorKind": {
+                    "type": "string",
+                    "enum": [
+                      "file",
+                      "vault-note",
+                      "nostr-event",
+                      "repository",
+                      "web-address"
+                    ]
+                  },
+                  "locator": {
+                    "type": "string"
+                  },
+                  "repo": {
+                    "type": "string"
+                  },
+                  "branch": {
+                    "type": "string"
+                  },
+                  "commit": {
+                    "type": "string"
+                  },
+                  "path": {
+                    "type": "string"
+                  },
+                  "anchor": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "x-tapestry": {
+              "unique": [
+                "slug"
+              ]
+            }
+          }
+        },
+        "required": [
+          "ihAgent"
+        ]
+      },
+      "elements": []
+    },
+    {
+      "name": "ih change outcome",
+      "address": "39998:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:ih-change-outcome",
+      "description": "An append-only verdict on a harness change: confirmed, refuted, reverted or inconclusive, with the before and after values and the evaluations it rests on. A harness change with an outcome is one data",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "ihChangeOutcome": {
+            "type": "object",
+            "title": "Ih Change Outcome",
+            "required": [
+              "name",
+              "slug",
+              "description",
+              "verdict",
+              "change"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "the record name"
+              },
+              "slug": {
+                "type": "string",
+                "description": "stable identity derived from the name"
+              },
+              "description": {
+                "type": "string",
+                "description": "a short description"
+              },
+              "verdict": {
+                "type": "string",
+                "enum": [
+                  "confirmed",
+                  "refuted",
+                  "reverted",
+                  "inconclusive"
+                ]
+              },
+              "before": {
+                "type": "string",
+                "description": "value before"
+              },
+              "after": {
+                "type": "string",
+                "description": "value after"
+              },
+              "observedOn": {
+                "type": "string",
+                "description": "date"
+              },
+              "change": {
+                "type": "string",
+                "description": "address of the linked record (39999:<pubkey>:<d-tag>)"
+              },
+              "evaluations": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "addresses of the linked records"
+              },
+              "evidence": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "description": "pointer out of the graph: locatorKind + locator, pinned to a commit for git (repo, branch, commit, path)",
+                  "properties": {
+                    "locatorKind": {
+                      "type": "string",
+                      "enum": [
+                        "file",
+                        "vault-note",
+                        "nostr-event",
+                        "repository",
+                        "web-address"
+                      ]
+                    },
+                    "locator": {
+                      "type": "string"
+                    },
+                    "repo": {
+                      "type": "string"
+                    },
+                    "branch": {
+                      "type": "string"
+                    },
+                    "commit": {
+                      "type": "string"
+                    },
+                    "path": {
+                      "type": "string"
+                    },
+                    "anchor": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "description": "pointers out of the graph"
+              }
+            },
+            "x-tapestry": {
+              "unique": [
+                "slug"
+              ]
+            }
+          }
+        },
+        "required": [
+          "ihChangeOutcome"
+        ]
+      },
+      "elements": []
+    },
+    {
+      "name": "ih evaluation",
+      "address": "39998:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:ih-evaluation",
+      "description": "An append-only measurement of a score: a value over a sample and a time window, for a harness version or a harness change, with pointers to the evidence (a CI run, a PR, an output file).",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "ihEvaluation": {
+            "type": "object",
+            "title": "Ih Evaluation",
+            "required": [
+              "name",
+              "slug",
+              "description",
+              "score"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "the record name"
+              },
+              "slug": {
+                "type": "string",
+                "description": "stable identity derived from the name"
+              },
+              "description": {
+                "type": "string",
+                "description": "a short description"
+              },
+              "value": {
+                "type": "number"
+              },
+              "n": {
+                "type": "integer"
+              },
+              "measuredOn": {
+                "type": "string",
+                "description": "date"
+              },
+              "window": {
+                "type": "string",
+                "description": "time window"
+              },
+              "score": {
+                "type": "string",
+                "description": "address of the linked record (39999:<pubkey>:<d-tag>)"
+              },
+              "harness": {
+                "type": "string",
+                "description": "address of the linked record (39999:<pubkey>:<d-tag>)"
+              },
+              "change": {
+                "type": "string",
+                "description": "address of the linked record (39999:<pubkey>:<d-tag>)"
+              },
+              "evidence": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "description": "pointer out of the graph: locatorKind + locator, pinned to a commit for git (repo, branch, commit, path)",
+                  "properties": {
+                    "locatorKind": {
+                      "type": "string",
+                      "enum": [
+                        "file",
+                        "vault-note",
+                        "nostr-event",
+                        "repository",
+                        "web-address"
+                      ]
+                    },
+                    "locator": {
+                      "type": "string"
+                    },
+                    "repo": {
+                      "type": "string"
+                    },
+                    "branch": {
+                      "type": "string"
+                    },
+                    "commit": {
+                      "type": "string"
+                    },
+                    "path": {
+                      "type": "string"
+                    },
+                    "anchor": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "description": "pointers out of the graph"
+              }
+            },
+            "x-tapestry": {
+              "unique": [
+                "slug"
+              ]
+            }
+          }
+        },
+        "required": [
+          "ihEvaluation"
+        ]
+      },
+      "elements": []
+    },
+    {
+      "name": "ih harness",
+      "address": "39998:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:ih-harness",
+      "description": "One version of a harness H^i_j: the agents, rules, workflows and checks that do a project's work (j = 0) or improve the harness below (j > 0). The harness text stays in git; the record pins it to a co",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "ihHarness": {
+            "type": "object",
+            "title": "Ih Harness",
+            "required": [
+              "name",
+              "slug",
+              "description",
+              "project",
+              "j",
+              "version"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "the record name"
+              },
+              "slug": {
+                "type": "string",
+                "description": "stable identity derived from the name"
+              },
+              "description": {
+                "type": "string",
+                "description": "a short description"
+              },
+              "project": {
+                "type": "string",
+                "description": "address of the linked record (39999:<pubkey>:<d-tag>)"
+              },
+              "j": {
+                "type": "integer",
+                "description": "the rung index; 0 is the base harness"
+              },
+              "version": {
+                "type": "string",
+                "description": "commit SHA of this version"
+              },
+              "branch": {
+                "type": "string",
+                "description": "branch the version was read from"
+              },
+              "status": {
+                "type": "string",
+                "description": "current or superseded"
+              },
+              "rung": {
+                "type": "string",
+                "description": "address of the linked record (39999:<pubkey>:<d-tag>)"
+              },
+              "supersedes": {
+                "type": "string",
+                "description": "address of the linked record (39999:<pubkey>:<d-tag>)"
+              },
+              "locators": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "description": "pointer out of the graph: locatorKind + locator, pinned to a commit for git (repo, branch, commit, path)",
+                  "properties": {
+                    "locatorKind": {
+                      "type": "string",
+                      "enum": [
+                        "file",
+                        "vault-note",
+                        "nostr-event",
+                        "repository",
+                        "web-address"
+                      ]
+                    },
+                    "locator": {
+                      "type": "string"
+                    },
+                    "repo": {
+                      "type": "string"
+                    },
+                    "branch": {
+                      "type": "string"
+                    },
+                    "commit": {
+                      "type": "string"
+                    },
+                    "path": {
+                      "type": "string"
+                    },
+                    "anchor": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "description": "pointers out of the graph"
+              }
+            },
+            "x-tapestry": {
+              "unique": [
+                "slug"
+              ]
+            }
+          }
+        },
+        "required": [
+          "ihHarness"
+        ]
+      },
+      "elements": [
+        {
+          "name": "H1_0 physics base harness",
+          "address": "39999:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:h1-0-physics-base-harness-f29105b5",
+          "createdAt": 1790550211,
+          "json": {
+            "ihHarness": {
+              "name": "H1_0 physics base harness",
+              "slug": "h1-0-physics-base-harness",
+              "description": "The base harness of the physics program as of 2026-09-27: the CoS and the Geometry, Literature and Ontology panel, the outline-panel-prose-cold-review pipeline, version and review folders, and the merge gate.",
+              "project": "39999:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:p1-physics-1b960bd8",
+              "j": 0,
+              "version": "953db3b59cf420c297a2dba18ce5b19f0d81469a",
+              "branch": "main",
+              "status": "current",
+              "locators": [
+                {
+                  "locatorKind": "repository",
+                  "locator": "github.com/nous-clawds4/physics@953db3b59cf420c297a2dba18ce5b19f0d81469a:papers",
+                  "repo": "nous-clawds4/physics",
+                  "branch": "main",
+                  "commit": "953db3b59cf420c297a2dba18ce5b19f0d81469a",
+                  "path": "papers"
+                },
+                {
+                  "locatorKind": "repository",
+                  "locator": "github.com/nous-clawds4/physics@953db3b59cf420c297a2dba18ce5b19f0d81469a:public-papers/observer-space-framework",
+                  "repo": "nous-clawds4/physics",
+                  "branch": "main",
+                  "commit": "953db3b59cf420c297a2dba18ce5b19f0d81469a",
+                  "path": "public-papers/observer-space-framework"
+                },
+                {
+                  "locatorKind": "repository",
+                  "locator": "github.com/nous-clawds4/physics@953db3b59cf420c297a2dba18ce5b19f0d81469a:public-papers/observer-space-framework/versions",
+                  "repo": "nous-clawds4/physics",
+                  "branch": "main",
+                  "commit": "953db3b59cf420c297a2dba18ce5b19f0d81469a",
+                  "path": "public-papers/observer-space-framework/versions"
+                },
+                {
+                  "locatorKind": "repository",
+                  "locator": "github.com/nous-clawds4/physics@953db3b59cf420c297a2dba18ce5b19f0d81469a:public-papers/observer-space-framework/reviews",
+                  "repo": "nous-clawds4/physics",
+                  "branch": "main",
+                  "commit": "953db3b59cf420c297a2dba18ce5b19f0d81469a",
+                  "path": "public-papers/observer-space-framework/reviews"
+                },
+                {
+                  "locatorKind": "repository",
+                  "locator": "github.com/nous-clawds4/infinite-harness@5d603359db3239aae890dbf2e9c5888e6d39a146:docs/examples/physics.md",
+                  "repo": "nous-clawds4/infinite-harness",
+                  "branch": "main",
+                  "commit": "5d603359db3239aae890dbf2e9c5888e6d39a146",
+                  "path": "docs/examples/physics.md"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "H2_0 tapestry base harness",
+          "address": "39999:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:h2-0-tapestry-base-harness-f29105b5",
+          "createdAt": 1790550211,
+          "json": {
+            "ihHarness": {
+              "name": "H2_0 tapestry base harness",
+              "slug": "h2-0-tapestry-base-harness",
+              "description": "The base harness of the Tapestry repo as of 2026-09-27: Engineering Team Mode, the Product Team flow, CI and the main-source guard, the release flow, the ledger, and the self-improvement machinery. The harness is defined by scripts/harness-def-paths.txt; one locator per path.",
+              "project": "39999:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:p2-tapestry-1b960bd8",
+              "j": 0,
+              "version": "1e518034a9e0277a79d27747bb26ece59c55023d",
+              "branch": "main",
+              "status": "current",
+              "locators": [
+                {
+                  "locatorKind": "repository",
+                  "locator": "github.com/nous-clawds4/tapestry@1e518034a9e0277a79d27747bb26ece59c55023d:CLAUDE.md",
+                  "repo": "nous-clawds4/tapestry",
+                  "branch": "main",
+                  "commit": "1e518034a9e0277a79d27747bb26ece59c55023d",
+                  "path": "CLAUDE.md"
+                },
+                {
+                  "locatorKind": "repository",
+                  "locator": "github.com/nous-clawds4/tapestry@1e518034a9e0277a79d27747bb26ece59c55023d:AGENTS.md",
+                  "repo": "nous-clawds4/tapestry",
+                  "branch": "main",
+                  "commit": "1e518034a9e0277a79d27747bb26ece59c55023d",
+                  "path": "AGENTS.md"
+                },
+                {
+                  "locatorKind": "repository",
+                  "locator": "github.com/nous-clawds4/tapestry@1e518034a9e0277a79d27747bb26ece59c55023d:engineering-team/README.md",
+                  "repo": "nous-clawds4/tapestry",
+                  "branch": "main",
+                  "commit": "1e518034a9e0277a79d27747bb26ece59c55023d",
+                  "path": "engineering-team/README.md"
+                },
+                {
+                  "locatorKind": "repository",
+                  "locator": "github.com/nous-clawds4/tapestry@1e518034a9e0277a79d27747bb26ece59c55023d:engineering-team/roles",
+                  "repo": "nous-clawds4/tapestry",
+                  "branch": "main",
+                  "commit": "1e518034a9e0277a79d27747bb26ece59c55023d",
+                  "path": "engineering-team/roles"
+                },
+                {
+                  "locatorKind": "repository",
+                  "locator": "github.com/nous-clawds4/tapestry@1e518034a9e0277a79d27747bb26ece59c55023d:engineering-team/workflows",
+                  "repo": "nous-clawds4/tapestry",
+                  "branch": "main",
+                  "commit": "1e518034a9e0277a79d27747bb26ece59c55023d",
+                  "path": "engineering-team/workflows"
+                },
+                {
+                  "locatorKind": "repository",
+                  "locator": "github.com/nous-clawds4/tapestry@1e518034a9e0277a79d27747bb26ece59c55023d:engineering-team/templates",
+                  "repo": "nous-clawds4/tapestry",
+                  "branch": "main",
+                  "commit": "1e518034a9e0277a79d27747bb26ece59c55023d",
+                  "path": "engineering-team/templates"
+                },
+                {
+                  "locatorKind": "repository",
+                  "locator": "github.com/nous-clawds4/tapestry@1e518034a9e0277a79d27747bb26ece59c55023d:engineering-team/CHANGELOG.md",
+                  "repo": "nous-clawds4/tapestry",
+                  "branch": "main",
+                  "commit": "1e518034a9e0277a79d27747bb26ece59c55023d",
+                  "path": "engineering-team/CHANGELOG.md"
+                },
+                {
+                  "locatorKind": "repository",
+                  "locator": "github.com/nous-clawds4/tapestry@1e518034a9e0277a79d27747bb26ece59c55023d:product-team/README.md",
+                  "repo": "nous-clawds4/tapestry",
+                  "branch": "main",
+                  "commit": "1e518034a9e0277a79d27747bb26ece59c55023d",
+                  "path": "product-team/README.md"
+                },
+                {
+                  "locatorKind": "repository",
+                  "locator": "github.com/nous-clawds4/tapestry@1e518034a9e0277a79d27747bb26ece59c55023d:product-team/roles",
+                  "repo": "nous-clawds4/tapestry",
+                  "branch": "main",
+                  "commit": "1e518034a9e0277a79d27747bb26ece59c55023d",
+                  "path": "product-team/roles"
+                },
+                {
+                  "locatorKind": "repository",
+                  "locator": "github.com/nous-clawds4/tapestry@1e518034a9e0277a79d27747bb26ece59c55023d:product-team/workflows",
+                  "repo": "nous-clawds4/tapestry",
+                  "branch": "main",
+                  "commit": "1e518034a9e0277a79d27747bb26ece59c55023d",
+                  "path": "product-team/workflows"
+                },
+                {
+                  "locatorKind": "repository",
+                  "locator": "github.com/nous-clawds4/tapestry@1e518034a9e0277a79d27747bb26ece59c55023d:product-team/templates",
+                  "repo": "nous-clawds4/tapestry",
+                  "branch": "main",
+                  "commit": "1e518034a9e0277a79d27747bb26ece59c55023d",
+                  "path": "product-team/templates"
+                },
+                {
+                  "locatorKind": "repository",
+                  "locator": "github.com/nous-clawds4/tapestry@1e518034a9e0277a79d27747bb26ece59c55023d:product-team/guardrails",
+                  "repo": "nous-clawds4/tapestry",
+                  "branch": "main",
+                  "commit": "1e518034a9e0277a79d27747bb26ece59c55023d",
+                  "path": "product-team/guardrails"
+                },
+                {
+                  "locatorKind": "repository",
+                  "locator": "github.com/nous-clawds4/tapestry@1e518034a9e0277a79d27747bb26ece59c55023d:.claude/agents",
+                  "repo": "nous-clawds4/tapestry",
+                  "branch": "main",
+                  "commit": "1e518034a9e0277a79d27747bb26ece59c55023d",
+                  "path": ".claude/agents"
+                },
+                {
+                  "locatorKind": "repository",
+                  "locator": "github.com/nous-clawds4/tapestry@1e518034a9e0277a79d27747bb26ece59c55023d:.claude/commands",
+                  "repo": "nous-clawds4/tapestry",
+                  "branch": "main",
+                  "commit": "1e518034a9e0277a79d27747bb26ece59c55023d",
+                  "path": ".claude/commands"
+                },
+                {
+                  "locatorKind": "repository",
+                  "locator": "github.com/nous-clawds4/tapestry@1e518034a9e0277a79d27747bb26ece59c55023d:.claude/skills",
+                  "repo": "nous-clawds4/tapestry",
+                  "branch": "main",
+                  "commit": "1e518034a9e0277a79d27747bb26ece59c55023d",
+                  "path": ".claude/skills"
+                },
+                {
+                  "locatorKind": "repository",
+                  "locator": "github.com/nous-clawds4/tapestry@1e518034a9e0277a79d27747bb26ece59c55023d:.claude/settings.json",
+                  "repo": "nous-clawds4/tapestry",
+                  "branch": "main",
+                  "commit": "1e518034a9e0277a79d27747bb26ece59c55023d",
+                  "path": ".claude/settings.json"
+                },
+                {
+                  "locatorKind": "repository",
+                  "locator": "github.com/nous-clawds4/tapestry@1e518034a9e0277a79d27747bb26ece59c55023d:scripts/whats-open.sh",
+                  "repo": "nous-clawds4/tapestry",
+                  "branch": "main",
+                  "commit": "1e518034a9e0277a79d27747bb26ece59c55023d",
+                  "path": "scripts/whats-open.sh"
+                },
+                {
+                  "locatorKind": "repository",
+                  "locator": "github.com/nous-clawds4/tapestry@1e518034a9e0277a79d27747bb26ece59c55023d:scripts/session-start.sh",
+                  "repo": "nous-clawds4/tapestry",
+                  "branch": "main",
+                  "commit": "1e518034a9e0277a79d27747bb26ece59c55023d",
+                  "path": "scripts/session-start.sh"
+                },
+                {
+                  "locatorKind": "repository",
+                  "locator": "github.com/nous-clawds4/tapestry@1e518034a9e0277a79d27747bb26ece59c55023d:scripts/harness-lint.sh",
+                  "repo": "nous-clawds4/tapestry",
+                  "branch": "main",
+                  "commit": "1e518034a9e0277a79d27747bb26ece59c55023d",
+                  "path": "scripts/harness-lint.sh"
+                },
+                {
+                  "locatorKind": "repository",
+                  "locator": "github.com/nous-clawds4/tapestry@1e518034a9e0277a79d27747bb26ece59c55023d:scripts/harness-stats.sh",
+                  "repo": "nous-clawds4/tapestry",
+                  "branch": "main",
+                  "commit": "1e518034a9e0277a79d27747bb26ece59c55023d",
+                  "path": "scripts/harness-stats.sh"
+                },
+                {
+                  "locatorKind": "repository",
+                  "locator": "github.com/nous-clawds4/tapestry@1e518034a9e0277a79d27747bb26ece59c55023d:scripts/lib",
+                  "repo": "nous-clawds4/tapestry",
+                  "branch": "main",
+                  "commit": "1e518034a9e0277a79d27747bb26ece59c55023d",
+                  "path": "scripts/lib"
+                },
+                {
+                  "locatorKind": "repository",
+                  "locator": "github.com/nous-clawds4/tapestry@1e518034a9e0277a79d27747bb26ece59c55023d:scripts/harness-lint-waivers.txt",
+                  "repo": "nous-clawds4/tapestry",
+                  "branch": "main",
+                  "commit": "1e518034a9e0277a79d27747bb26ece59c55023d",
+                  "path": "scripts/harness-lint-waivers.txt"
+                },
+                {
+                  "locatorKind": "repository",
+                  "locator": "github.com/nous-clawds4/tapestry@1e518034a9e0277a79d27747bb26ece59c55023d:scripts/harness-budgets.txt",
+                  "repo": "nous-clawds4/tapestry",
+                  "branch": "main",
+                  "commit": "1e518034a9e0277a79d27747bb26ece59c55023d",
+                  "path": "scripts/harness-budgets.txt"
+                },
+                {
+                  "locatorKind": "repository",
+                  "locator": "github.com/nous-clawds4/tapestry@1e518034a9e0277a79d27747bb26ece59c55023d:scripts/harness-def-paths.txt",
+                  "repo": "nous-clawds4/tapestry",
+                  "branch": "main",
+                  "commit": "1e518034a9e0277a79d27747bb26ece59c55023d",
+                  "path": "scripts/harness-def-paths.txt"
+                },
+                {
+                  "locatorKind": "repository",
+                  "locator": "github.com/nous-clawds4/tapestry@1e518034a9e0277a79d27747bb26ece59c55023d:scripts/long-lived-branches.txt",
+                  "repo": "nous-clawds4/tapestry",
+                  "branch": "main",
+                  "commit": "1e518034a9e0277a79d27747bb26ece59c55023d",
+                  "path": "scripts/long-lived-branches.txt"
+                },
+                {
+                  "locatorKind": "repository",
+                  "locator": "github.com/nous-clawds4/infinite-harness@5d603359db3239aae890dbf2e9c5888e6d39a146:docs/examples/tapestry.md",
+                  "repo": "nous-clawds4/infinite-harness",
+                  "branch": "main",
+                  "commit": "5d603359db3239aae890dbf2e9c5888e6d39a146",
+                  "path": "docs/examples/tapestry.md"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ih harness change",
+      "address": "39998:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:ih-harness-change",
+      "description": "An append-only record of one change to a harness: what changed, why, where the idea came from, a prediction of what should happen next, and an audit of any weakened definitions, removed checks or demo",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "ihHarnessChange": {
+            "type": "object",
+            "title": "Ih Harness Change",
+            "required": [
+              "name",
+              "slug",
+              "description",
+              "summary",
+              "why",
+              "modifies"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "the record name"
+              },
+              "slug": {
+                "type": "string",
+                "description": "stable identity derived from the name"
+              },
+              "description": {
+                "type": "string",
+                "description": "a short description"
+              },
+              "summary": {
+                "type": "string",
+                "description": "what changed"
+              },
+              "why": {
+                "type": "string",
+                "description": "the reason"
+              },
+              "origin": {
+                "type": "string",
+                "description": "where the change came from"
+              },
+              "recordedOn": {
+                "type": "string",
+                "description": "date"
+              },
+              "prediction": {
+                "type": "object",
+                "properties": {
+                  "expect": {
+                    "type": "string"
+                  },
+                  "atRisk": {
+                    "type": "string"
+                  },
+                  "metric": {
+                    "type": "string"
+                  },
+                  "horizon": {
+                    "type": "string"
+                  },
+                  "retrofitted": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "diffAudit": {
+                "type": "object",
+                "properties": {
+                  "weakenedDefinitions": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "removedChecks": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "demotions": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "modifies": {
+                "type": "string",
+                "description": "address of the linked record (39999:<pubkey>:<d-tag>)"
+              },
+              "madeBy": {
+                "type": "string",
+                "description": "address of the linked record (39999:<pubkey>:<d-tag>)"
+              },
+              "touches": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "addresses of the linked records"
+              },
+              "evidence": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "description": "pointer out of the graph: locatorKind + locator, pinned to a commit for git (repo, branch, commit, path)",
+                  "properties": {
+                    "locatorKind": {
+                      "type": "string",
+                      "enum": [
+                        "file",
+                        "vault-note",
+                        "nostr-event",
+                        "repository",
+                        "web-address"
+                      ]
+                    },
+                    "locator": {
+                      "type": "string"
+                    },
+                    "repo": {
+                      "type": "string"
+                    },
+                    "branch": {
+                      "type": "string"
+                    },
+                    "commit": {
+                      "type": "string"
+                    },
+                    "path": {
+                      "type": "string"
+                    },
+                    "anchor": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "description": "pointers out of the graph"
+              }
+            },
+            "x-tapestry": {
+              "unique": [
+                "slug"
+              ]
+            }
+          }
+        },
+        "required": [
+          "ihHarnessChange"
+        ]
+      },
+      "elements": []
+    },
+    {
+      "name": "ih hold level",
+      "address": "39998:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:ih-hold-level",
+      "description": "One level of the how-strongly-held axis, L0 (Locked) to L4 (Free): who may change an item at this level and what a change requires. Five fixed records, defined by hold-axis.md in the IH repo.",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "ihHoldLevel": {
+            "type": "object",
+            "title": "Ih Hold Level",
+            "required": [
+              "name",
+              "slug",
+              "description",
+              "rank",
+              "label"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "the record name"
+              },
+              "slug": {
+                "type": "string",
+                "description": "stable identity derived from the name"
+              },
+              "description": {
+                "type": "string",
+                "description": "a short description"
+              },
+              "rank": {
+                "type": "integer",
+                "description": "0 (Locked) to 4 (Free)"
+              },
+              "label": {
+                "type": "string",
+                "description": "Locked, Sign-off, Reviewed, Disclosed or Free"
+              },
+              "whoMayChange": {
+                "type": "string",
+                "description": "who may change an item at this level"
+              },
+              "requires": {
+                "type": "string",
+                "description": "what a change requires"
+              },
+              "definedIn": {
+                "type": "object",
+                "description": "pointer out of the graph: locatorKind + locator, pinned to a commit for git (repo, branch, commit, path)",
+                "properties": {
+                  "locatorKind": {
+                    "type": "string",
+                    "enum": [
+                      "file",
+                      "vault-note",
+                      "nostr-event",
+                      "repository",
+                      "web-address"
+                    ]
+                  },
+                  "locator": {
+                    "type": "string"
+                  },
+                  "repo": {
+                    "type": "string"
+                  },
+                  "branch": {
+                    "type": "string"
+                  },
+                  "commit": {
+                    "type": "string"
+                  },
+                  "path": {
+                    "type": "string"
+                  },
+                  "anchor": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "x-tapestry": {
+              "unique": [
+                "slug"
+              ]
+            }
+          }
+        },
+        "required": [
+          "ihHoldLevel"
+        ]
+      },
+      "elements": [
+        {
+          "name": "L0 Locked",
+          "address": "39999:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:l0-locked-f2d8ac29",
+          "createdAt": 1790550211,
+          "json": {
+            "ihHoldLevel": {
+              "name": "L0 Locked",
+              "slug": "l0-locked",
+              "description": "Hold level L0, Locked: only the human; a change requires: the human makes or authors the change.",
+              "rank": 0,
+              "label": "Locked",
+              "whoMayChange": "Only the human",
+              "requires": "The human makes or authors the change",
+              "definedIn": {
+                "locatorKind": "repository",
+                "locator": "github.com/nous-clawds4/infinite-harness@5d603359db3239aae890dbf2e9c5888e6d39a146:docs/hold-axis.md#3-the-axis-how-strongly-held",
+                "repo": "nous-clawds4/infinite-harness",
+                "branch": "main",
+                "commit": "5d603359db3239aae890dbf2e9c5888e6d39a146",
+                "path": "docs/hold-axis.md",
+                "anchor": "3-the-axis-how-strongly-held"
+              }
+            }
+          }
+        },
+        {
+          "name": "L1 Sign-off",
+          "address": "39999:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:l1-sign-off-f2d8ac29",
+          "createdAt": 1790550211,
+          "json": {
+            "ihHoldLevel": {
+              "name": "L1 Sign-off",
+              "slug": "l1-sign-off",
+              "description": "Hold level L1, Sign-off: an agent may propose; a change requires: explicit human sign-off before it takes effect.",
+              "rank": 1,
+              "label": "Sign-off",
+              "whoMayChange": "An agent may propose",
+              "requires": "Explicit human sign-off before it takes effect",
+              "definedIn": {
+                "locatorKind": "repository",
+                "locator": "github.com/nous-clawds4/infinite-harness@5d603359db3239aae890dbf2e9c5888e6d39a146:docs/hold-axis.md#3-the-axis-how-strongly-held",
+                "repo": "nous-clawds4/infinite-harness",
+                "branch": "main",
+                "commit": "5d603359db3239aae890dbf2e9c5888e6d39a146",
+                "path": "docs/hold-axis.md",
+                "anchor": "3-the-axis-how-strongly-held"
+              }
+            }
+          }
+        },
+        {
+          "name": "L2 Reviewed",
+          "address": "39999:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:l2-reviewed-f2d8ac29",
+          "createdAt": 1790550211,
+          "json": {
+            "ihHoldLevel": {
+              "name": "L2 Reviewed",
+              "slug": "l2-reviewed",
+              "description": "Hold level L2, Reviewed: an agent may propose; a change requires: peer or panel review before it takes effect.",
+              "rank": 2,
+              "label": "Reviewed",
+              "whoMayChange": "An agent may propose",
+              "requires": "Peer or panel review before it takes effect",
+              "definedIn": {
+                "locatorKind": "repository",
+                "locator": "github.com/nous-clawds4/infinite-harness@5d603359db3239aae890dbf2e9c5888e6d39a146:docs/hold-axis.md#3-the-axis-how-strongly-held",
+                "repo": "nous-clawds4/infinite-harness",
+                "branch": "main",
+                "commit": "5d603359db3239aae890dbf2e9c5888e6d39a146",
+                "path": "docs/hold-axis.md",
+                "anchor": "3-the-axis-how-strongly-held"
+              }
+            }
+          }
+        },
+        {
+          "name": "L3 Disclosed",
+          "address": "39999:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:l3-disclosed-f2d8ac29",
+          "createdAt": 1790550211,
+          "json": {
+            "ihHoldLevel": {
+              "name": "L3 Disclosed",
+              "slug": "l3-disclosed",
+              "description": "Hold level L3, Disclosed: an agent may change it; a change requires: open disclosure, with reasons, where readers will see it (for example, in the artifact's own changelog); reviewable after the fact.",
+              "rank": 3,
+              "label": "Disclosed",
+              "whoMayChange": "An agent may change it",
+              "requires": "Open disclosure, with reasons, where readers will see it (for example, in the artifact's own changelog); reviewable after the fact",
+              "definedIn": {
+                "locatorKind": "repository",
+                "locator": "github.com/nous-clawds4/infinite-harness@5d603359db3239aae890dbf2e9c5888e6d39a146:docs/hold-axis.md#3-the-axis-how-strongly-held",
+                "repo": "nous-clawds4/infinite-harness",
+                "branch": "main",
+                "commit": "5d603359db3239aae890dbf2e9c5888e6d39a146",
+                "path": "docs/hold-axis.md",
+                "anchor": "3-the-axis-how-strongly-held"
+              }
+            }
+          }
+        },
+        {
+          "name": "L4 Free",
+          "address": "39999:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:l4-free-f2d8ac29",
+          "createdAt": 1790550211,
+          "json": {
+            "ihHoldLevel": {
+              "name": "L4 Free",
+              "slug": "l4-free",
+              "description": "Hold level L4, Free: an agent may change it; a change requires: nothing beyond the log (commit or PR history).",
+              "rank": 4,
+              "label": "Free",
+              "whoMayChange": "An agent may change it",
+              "requires": "Nothing beyond the log (commit or PR history)",
+              "definedIn": {
+                "locatorKind": "repository",
+                "locator": "github.com/nous-clawds4/infinite-harness@5d603359db3239aae890dbf2e9c5888e6d39a146:docs/hold-axis.md#3-the-axis-how-strongly-held",
+                "repo": "nous-clawds4/infinite-harness",
+                "branch": "main",
+                "commit": "5d603359db3239aae890dbf2e9c5888e6d39a146",
+                "path": "docs/hold-axis.md",
+                "anchor": "3-the-axis-how-strongly-held"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ih hold rating",
+      "address": "39998:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:ih-hold-rating",
+      "description": "An append-only re-rating of an item on the hold axis, from one level to another. A promotion (toward L0) is always allowed; a demotion (toward L4) is valid only with a ruling from the level above.",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "ihHoldRating": {
+            "type": "object",
+            "title": "Ih Hold Rating",
+            "required": [
+              "name",
+              "slug",
+              "description",
+              "item",
+              "to",
+              "direction"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "the record name"
+              },
+              "slug": {
+                "type": "string",
+                "description": "stable identity derived from the name"
+              },
+              "description": {
+                "type": "string",
+                "description": "a short description"
+              },
+              "item": {
+                "type": "string",
+                "description": "address of the linked record (39999:<pubkey>:<d-tag>)"
+              },
+              "from": {
+                "type": "string",
+                "description": "address of the linked record (39999:<pubkey>:<d-tag>)"
+              },
+              "to": {
+                "type": "string",
+                "description": "address of the linked record (39999:<pubkey>:<d-tag>)"
+              },
+              "direction": {
+                "type": "string",
+                "enum": [
+                  "promote",
+                  "demote"
+                ]
+              },
+              "reason": {
+                "type": "string",
+                "description": "why"
+              },
+              "proposedBy": {
+                "type": "string",
+                "description": "who proposed it"
+              },
+              "ruling": {
+                "type": "string",
+                "description": "address of the linked record (39999:<pubkey>:<d-tag>)"
+              },
+              "ratedOn": {
+                "type": "string",
+                "description": "date"
+              }
+            },
+            "x-tapestry": {
+              "unique": [
+                "slug"
+              ]
+            }
+          }
+        },
+        "required": [
+          "ihHoldRating"
+        ]
+      },
+      "elements": []
+    },
+    {
+      "name": "ih item",
+      "address": "39998:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:ih-item",
+      "description": "A rule, check, definition or file of a harness, placed on the hold axis. The text stays in git and is reached by a pointer; the current hold level is derived from the item's latest valid rating.",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "ihItem": {
+            "type": "object",
+            "title": "Ih Item",
+            "required": [
+              "name",
+              "slug",
+              "description"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "the record name"
+              },
+              "slug": {
+                "type": "string",
+                "description": "stable identity derived from the name"
+              },
+              "description": {
+                "type": "string",
+                "description": "a short description"
+              },
+              "itemType": {
+                "type": "string",
+                "description": "rule, check, definition or file"
+              },
+              "summary": {
+                "type": "string",
+                "description": "short summary; the text stays in git"
+              },
+              "harness": {
+                "type": "string",
+                "description": "address of the linked record (39999:<pubkey>:<d-tag>)"
+              },
+              "holdLevel": {
+                "type": "string",
+                "description": "address of the linked record (39999:<pubkey>:<d-tag>)"
+              },
+              "locator": {
+                "type": "object",
+                "description": "pointer out of the graph: locatorKind + locator, pinned to a commit for git (repo, branch, commit, path)",
+                "properties": {
+                  "locatorKind": {
+                    "type": "string",
+                    "enum": [
+                      "file",
+                      "vault-note",
+                      "nostr-event",
+                      "repository",
+                      "web-address"
+                    ]
+                  },
+                  "locator": {
+                    "type": "string"
+                  },
+                  "repo": {
+                    "type": "string"
+                  },
+                  "branch": {
+                    "type": "string"
+                  },
+                  "commit": {
+                    "type": "string"
+                  },
+                  "path": {
+                    "type": "string"
+                  },
+                  "anchor": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "x-tapestry": {
+              "unique": [
+                "slug"
+              ]
+            }
+          }
+        },
+        "required": [
+          "ihItem"
+        ]
+      },
+      "elements": []
+    },
+    {
+      "name": "ih project",
+      "address": "39998:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:ih-project",
+      "description": "An Infinite Harness project P^i: one body of work, usually a repo, whose harness is improved by a ladder of rungs. The record holds the project index and status and links to its goal, base harness and",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "ihProject": {
+            "type": "object",
+            "title": "Ih Project",
+            "required": [
+              "name",
+              "slug",
+              "description",
+              "index"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "the record name"
+              },
+              "slug": {
+                "type": "string",
+                "description": "stable identity derived from the name"
+              },
+              "description": {
+                "type": "string",
+                "description": "a short description"
+              },
+              "index": {
+                "type": "integer",
+                "description": "the project index i (0 is the ladder itself)"
+              },
+              "status": {
+                "type": "string",
+                "description": "active, paused or closed"
+              },
+              "openedOn": {
+                "type": "string",
+                "description": "date the project joined IH"
+              },
+              "goal": {
+                "type": "string",
+                "description": "address of the linked record (39999:<pubkey>:<d-tag>)"
+              },
+              "baseHarness": {
+                "type": "string",
+                "description": "address of the linked record (39999:<pubkey>:<d-tag>)"
+              },
+              "agent": {
+                "type": "string",
+                "description": "address of the linked record (39999:<pubkey>:<d-tag>)"
+              },
+              "repository": {
+                "type": "object",
+                "description": "pointer out of the graph: locatorKind + locator, pinned to a commit for git (repo, branch, commit, path)",
+                "properties": {
+                  "locatorKind": {
+                    "type": "string",
+                    "enum": [
+                      "file",
+                      "vault-note",
+                      "nostr-event",
+                      "repository",
+                      "web-address"
+                    ]
+                  },
+                  "locator": {
+                    "type": "string"
+                  },
+                  "repo": {
+                    "type": "string"
+                  },
+                  "branch": {
+                    "type": "string"
+                  },
+                  "commit": {
+                    "type": "string"
+                  },
+                  "path": {
+                    "type": "string"
+                  },
+                  "anchor": {
+                    "type": "string"
+                  }
+                }
+              },
+              "pointers": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "description": "pointer out of the graph: locatorKind + locator, pinned to a commit for git (repo, branch, commit, path)",
+                  "properties": {
+                    "locatorKind": {
+                      "type": "string",
+                      "enum": [
+                        "file",
+                        "vault-note",
+                        "nostr-event",
+                        "repository",
+                        "web-address"
+                      ]
+                    },
+                    "locator": {
+                      "type": "string"
+                    },
+                    "repo": {
+                      "type": "string"
+                    },
+                    "branch": {
+                      "type": "string"
+                    },
+                    "commit": {
+                      "type": "string"
+                    },
+                    "path": {
+                      "type": "string"
+                    },
+                    "anchor": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "description": "pointers out of the graph"
+              }
+            },
+            "x-tapestry": {
+              "unique": [
+                "slug"
+              ]
+            }
+          }
+        },
+        "required": [
+          "ihProject"
+        ]
+      },
+      "elements": [
+        {
+          "name": "P1 physics",
+          "address": "39999:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:p1-physics-1b960bd8",
+          "createdAt": 1790550211,
+          "json": {
+            "ihProject": {
+              "name": "P1 physics",
+              "slug": "p1-physics",
+              "description": "Project P^1: David Strayhorn's physics program, a precise theory of the observer from which the Born rule is derived, not assumed.",
+              "index": 1,
+              "status": "active",
+              "baseHarness": "39999:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:h1-0-physics-base-harness-f29105b5",
+              "repository": {
+                "locatorKind": "repository",
+                "locator": "github.com/nous-clawds4/physics@953db3b59cf420c297a2dba18ce5b19f0d81469a:",
+                "repo": "nous-clawds4/physics",
+                "branch": "main",
+                "commit": "953db3b59cf420c297a2dba18ce5b19f0d81469a",
+                "path": ""
+              },
+              "pointers": [
+                {
+                  "locatorKind": "repository",
+                  "locator": "github.com/nous-clawds4/infinite-harness@5d603359db3239aae890dbf2e9c5888e6d39a146:docs/examples/physics.md",
+                  "repo": "nous-clawds4/infinite-harness",
+                  "branch": "main",
+                  "commit": "5d603359db3239aae890dbf2e9c5888e6d39a146",
+                  "path": "docs/examples/physics.md"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "P2 tapestry",
+          "address": "39999:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:p2-tapestry-1b960bd8",
+          "createdAt": 1790550211,
+          "json": {
+            "ihProject": {
+              "name": "P2 tapestry",
+              "slug": "p2-tapestry",
+              "description": "Project P^2: the Tapestry repo, managed so that Tapestry advances toward its README and ROADMAP goals for every kind of instance (personal, community, enterprise search service) without violating its architecture invariants.",
+              "index": 2,
+              "status": "active",
+              "baseHarness": "39999:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:h2-0-tapestry-base-harness-f29105b5",
+              "repository": {
+                "locatorKind": "repository",
+                "locator": "github.com/nous-clawds4/tapestry@1e518034a9e0277a79d27747bb26ece59c55023d:",
+                "repo": "nous-clawds4/tapestry",
+                "branch": "main",
+                "commit": "1e518034a9e0277a79d27747bb26ece59c55023d",
+                "path": ""
+              },
+              "pointers": [
+                {
+                  "locatorKind": "repository",
+                  "locator": "github.com/nous-clawds4/infinite-harness@5d603359db3239aae890dbf2e9c5888e6d39a146:docs/examples/tapestry.md",
+                  "repo": "nous-clawds4/infinite-harness",
+                  "branch": "main",
+                  "commit": "5d603359db3239aae890dbf2e9c5888e6d39a146",
+                  "path": "docs/examples/tapestry.md"
+                },
+                {
+                  "locatorKind": "repository",
+                  "locator": "github.com/nous-clawds4/tapestry@1e518034a9e0277a79d27747bb26ece59c55023d:README.md",
+                  "repo": "nous-clawds4/tapestry",
+                  "branch": "main",
+                  "commit": "1e518034a9e0277a79d27747bb26ece59c55023d",
+                  "path": "README.md"
+                },
+                {
+                  "locatorKind": "repository",
+                  "locator": "github.com/nous-clawds4/tapestry@1e518034a9e0277a79d27747bb26ece59c55023d:ROADMAP.md",
+                  "repo": "nous-clawds4/tapestry",
+                  "branch": "main",
+                  "commit": "1e518034a9e0277a79d27747bb26ece59c55023d",
+                  "path": "ROADMAP.md"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ih ruling",
+      "address": "39998:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:ih-ruling",
+      "description": "A decision, approve or refuse, on a hold rating or a harness change, by the level above the proposer (the human for anything at L0-L1 or touching a goal). The ruling points at the git commit or PR whe",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "ihRuling": {
+            "type": "object",
+            "title": "Ih Ruling",
+            "required": [
+              "name",
+              "slug",
+              "description",
+              "decision",
+              "decides"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "the record name"
+              },
+              "slug": {
+                "type": "string",
+                "description": "stable identity derived from the name"
+              },
+              "description": {
+                "type": "string",
+                "description": "a short description"
+              },
+              "decision": {
+                "type": "string",
+                "enum": [
+                  "approve",
+                  "refuse"
+                ]
+              },
+              "reason": {
+                "type": "string",
+                "description": "why"
+              },
+              "ruledBy": {
+                "type": "string",
+                "description": "who ruled"
+              },
+              "ruledOn": {
+                "type": "string",
+                "description": "date"
+              },
+              "decides": {
+                "type": "string",
+                "description": "address of the linked record (39999:<pubkey>:<d-tag>)"
+              },
+              "evidence": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "description": "pointer out of the graph: locatorKind + locator, pinned to a commit for git (repo, branch, commit, path)",
+                  "properties": {
+                    "locatorKind": {
+                      "type": "string",
+                      "enum": [
+                        "file",
+                        "vault-note",
+                        "nostr-event",
+                        "repository",
+                        "web-address"
+                      ]
+                    },
+                    "locator": {
+                      "type": "string"
+                    },
+                    "repo": {
+                      "type": "string"
+                    },
+                    "branch": {
+                      "type": "string"
+                    },
+                    "commit": {
+                      "type": "string"
+                    },
+                    "path": {
+                      "type": "string"
+                    },
+                    "anchor": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "description": "pointers out of the graph"
+              }
+            },
+            "x-tapestry": {
+              "unique": [
+                "slug"
+              ]
+            }
+          }
+        },
+        "required": [
+          "ihRuling"
+        ]
+      },
+      "elements": []
+    },
+    {
+      "name": "ih rung",
+      "address": "39998:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:ih-rung",
+      "description": "Rung j of a project's ladder: the level whose job is to improve H^i_{j-1}. Holds its scores, the minimum history the rung below needs before this rung may act, and whether it runs separately or merged",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "ihRung": {
+            "type": "object",
+            "title": "Ih Rung",
+            "required": [
+              "name",
+              "slug",
+              "description",
+              "project",
+              "j"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "the record name"
+              },
+              "slug": {
+                "type": "string",
+                "description": "stable identity derived from the name"
+              },
+              "description": {
+                "type": "string",
+                "description": "a short description"
+              },
+              "project": {
+                "type": "string",
+                "description": "address of the linked record (39999:<pubkey>:<d-tag>)"
+              },
+              "j": {
+                "type": "integer"
+              },
+              "goal": {
+                "type": "string",
+                "description": "address of the linked record (39999:<pubkey>:<d-tag>)"
+              },
+              "improves": {
+                "type": "string",
+                "description": "address of the linked record (39999:<pubkey>:<d-tag>)"
+              },
+              "agent": {
+                "type": "string",
+                "description": "address of the linked record (39999:<pubkey>:<d-tag>)"
+              },
+              "scoreDefinitions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "addresses of the linked records"
+              },
+              "minHistory": {
+                "type": "string",
+                "description": "the measurement gate of hold-axis section 1"
+              },
+              "mode": {
+                "type": "string",
+                "enum": [
+                  "separate",
+                  "merged-into-lower"
+                ]
+              }
+            },
+            "x-tapestry": {
+              "unique": [
+                "slug"
+              ]
+            }
+          }
+        },
+        "required": [
+          "ihRung"
+        ]
+      },
+      "elements": []
+    },
+    {
+      "name": "ih score",
+      "address": "39998:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:ih-score",
+      "description": "A score S^i_j that rung j uses to tell a better harness below it from a worse one: how it is computed, whether it is held out from the rung being scored, and which direction is better.",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "ihScore": {
+            "type": "object",
+            "title": "Ih Score",
+            "required": [
+              "name",
+              "slug",
+              "description"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "the record name"
+              },
+              "slug": {
+                "type": "string",
+                "description": "stable identity derived from the name"
+              },
+              "description": {
+                "type": "string",
+                "description": "a short description"
+              },
+              "method": {
+                "type": "string",
+                "description": "how it is computed"
+              },
+              "heldOut": {
+                "type": "boolean"
+              },
+              "direction": {
+                "type": "string",
+                "enum": [
+                  "higher",
+                  "lower"
+                ]
+              },
+              "rung": {
+                "type": "string",
+                "description": "address of the linked record (39999:<pubkey>:<d-tag>)"
+              },
+              "computedBy": {
+                "type": "object",
+                "description": "pointer out of the graph: locatorKind + locator, pinned to a commit for git (repo, branch, commit, path)",
+                "properties": {
+                  "locatorKind": {
+                    "type": "string",
+                    "enum": [
+                      "file",
+                      "vault-note",
+                      "nostr-event",
+                      "repository",
+                      "web-address"
+                    ]
+                  },
+                  "locator": {
+                    "type": "string"
+                  },
+                  "repo": {
+                    "type": "string"
+                  },
+                  "branch": {
+                    "type": "string"
+                  },
+                  "commit": {
+                    "type": "string"
+                  },
+                  "path": {
+                    "type": "string"
+                  },
+                  "anchor": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "x-tapestry": {
+              "unique": [
+                "slug"
+              ]
+            }
+          }
+        },
+        "required": [
+          "ihScore"
+        ]
+      },
+      "elements": []
+    },
+    {
+      "name": "ih skill",
+      "address": "39998:11f23fe40984a07be717d1628bdd0e87a2b4569f05dd7625923c20b89df93767:ih-skill",
+      "description": "A reusable skill used by one or more harnesses, such as a literature-review method or a deploy-chain script. Its hold level is the strictest level of any harness that uses it. The skill text stays in ",
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "ihSkill": {
+            "type": "object",
+            "title": "Ih Skill",
+            "required": [
+              "name",
+              "slug",
+              "description"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "the record name"
+              },
+              "slug": {
+                "type": "string",
+                "description": "stable identity derived from the name"
+              },
+              "description": {
+                "type": "string",
+                "description": "a short description"
+              },
+              "holdLevel": {
+                "type": "string",
+                "description": "address of the linked record (39999:<pubkey>:<d-tag>)"
+              },
+              "provenIn": {
+                "type": "string",
+                "description": "where the skill has proven itself"
+              },
+              "usedBy": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "addresses of the linked records"
+              },
+              "definition": {
+                "type": "object",
+                "description": "pointer out of the graph: locatorKind + locator, pinned to a commit for git (repo, branch, commit, path)",
+                "properties": {
+                  "locatorKind": {
+                    "type": "string",
+                    "enum": [
+                      "file",
+                      "vault-note",
+                      "nostr-event",
+                      "repository",
+                      "web-address"
+                    ]
+                  },
+                  "locator": {
+                    "type": "string"
+                  },
+                  "repo": {
+                    "type": "string"
+                  },
+                  "branch": {
+                    "type": "string"
+                  },
+                  "commit": {
+                    "type": "string"
+                  },
+                  "path": {
+                    "type": "string"
+                  },
+                  "anchor": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "x-tapestry": {
+              "unique": [
+                "slug"
+              ]
+            }
+          }
+        },
+        "required": [
+          "ihSkill"
+        ]
+      },
+      "elements": []
+    }
+  ]
+}
