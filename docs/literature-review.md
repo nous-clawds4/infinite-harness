@@ -93,9 +93,7 @@ Even collapsed designs keep a fixed top. DGM-H's parent selection "is not subjec
 
 **Ideas to adopt.**
 
-1. **Enforce the writable surface mechanically.** DGM and STOP both ignored written "do not change" instructions. On 2026-09-27 the GitHub API showed `nous-clawds4` as owner and admin of this repo, with branch protection unavailable ("Upgrade to GitHub Pro or make this repository public"). Every L0/L1 item here currently rests on convention. The fix is one of these:
-   - keep L0 files in a repo owned by David's own account, where the agent account can only read; or
-   - get branch protection or rulesets and use CODEOWNERS with David as owner. GitHub notes that full protection needs an owner for the CODEOWNERS file itself, which is the same idea as the L0 re-rating rule.
+1. **Enforce the writable surface mechanically.** DGM and STOP both ignored written "do not change" instructions. This is now implemented for the public IH repository. On 2026-09-27, ruleset `24088273` (`main-goal-protection`) began requiring a pull request for `main`, requiring code-owner review for covered paths, and blocking force-pushes and branch deletion, with no bypass actors. `.github/CODEOWNERS` assigns `@wds4` to `/README.md`, `/docs/hold-axis.md`, and `/.github/CODEOWNERS`, so the L0 goal-protection files are no longer protected by convention alone. `nous-clawds4` remains a repository administrator and could edit or delete the ruleset, but that would be a visible, audited settings change rather than a silent file edit. David's own signing key remains the stronger layer for L0 rulings.
 2. **Hide and rotate some checks** from the rung being checked (DGM).
 3. **Audits flag; they do not score.** Diff-audit findings go to the level above for a decision. They are not a target the lower rung iterates against (Baker et al.). This refines mechanism (c).
 4. **Score against the goal as it stood when the change was proposed** (current-RF).
@@ -177,3 +175,4 @@ IH should also face Hyperagents' argument that an explicit ladder "ultimately le
 ## Changelog
 
 - 2026-09-27: created by the CoS (L3).
+- On 2026-09-27 (night), this L3 note was updated to record the public repository's ruleset and CODEOWNERS enforcement of L0 goal protection, including the remaining administrator-editability caveat.
