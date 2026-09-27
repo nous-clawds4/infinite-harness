@@ -2,7 +2,7 @@
 
 *The how-strongly-held axis is David Strayhorn's idea. This note writes it up together with two points David and the CoS agreed on: rungs need a score, and the goal needs protection from the harness that serves it.*
 
-**Status:** proposed. Under its own scale this note is L3 (panel or peer review before change), except the re-rating rule in §4, which is L0.
+**Status:** proposed. Under its own scale this note is L3: the CoS may change it, but must disclose each change openly with its reasons. The exception is the re-rating rule in §4, which is L0.
 
 ## 1. Measurement comes first
 
@@ -44,18 +44,18 @@ Holding is a spectrum, not a binary "locked or not". Every item in a harness get
 |---|---|---|---|
 | **L0** | Locked | Only the human | The human makes or authors the change |
 | **L1** | Sign-off | An agent may propose | Explicit human sign-off before it takes effect |
-| **L2** | Disclosed | An agent may change it | Open disclosure, with reasons, where readers will see it (for example, in the artifact's own changelog) |
-| **L3** | Reviewed | An agent may change it | Peer or panel review before it takes effect |
+| **L2** | Reviewed | An agent may propose | Peer or panel review before it takes effect |
+| **L3** | Disclosed | An agent may change it | Open disclosure, with reasons, where readers will see it (for example, in the artifact's own changelog); reviewable after the fact |
 | **L4** | Free | An agent may change it | Nothing beyond the log (commit or PR history) |
 
-L2 and L3 differ in *who watches*. An L2 change must be visible to the outside: readers, the rung above, and the human. An L3 change needs an inside check but no outside announcement. An item can carry both requirements.
+L2 ranks above L3 because a gate before a change is stronger than review after it.
 
 Examples, for a generic project:
 
 - **L0:** the goal statement; the rule that the output may not claim a result it has not shown.
 - **L1:** acceptance criteria; the list of what counts as "done".
-- **L2:** a working assumption the output depends on. It may be revised at a genuine dead end, but the output must say so.
-- **L3:** adding a new hypothesis, method or tool to the standard workflow.
+- **L2:** adding a new hypothesis, method or tool to the standard workflow.
+- **L3:** a working assumption the output depends on. It may be revised at a genuine dead end, but the output must say so.
 - **L4:** formatting, file layout, routine docs, merging work that respects every item above.
 
 [`examples/physics.md`](examples/physics.md) places the rules of a real project on this scale.
