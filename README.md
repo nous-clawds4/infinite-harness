@@ -23,7 +23,7 @@ We don't launch new rungs willy nilly. The CoS and the Project Manager for any g
 
 # Infinite Ladder for the Infinite Ladder
 
-The Infinite Ladder is its own project. We will define it as the first (so $i = 0$) project, $P^0$, with subsequent Projects designated with superscripts `1, 2, 3, ...`: $P^1, P^2, P^3, ...$ The CoS is therefore the Project Manager $A^0$ for $P^0$. The purpose of this repository is to build the "level-0 rung" of the infinite harness, $H^0_0$. [2]
+The Infinite Ladder is its own project. We will define it as the first (so $i = 0$) project, $P^0$, with subsequent Projects designated with superscripts `1, 2, 3, ...`: $P^1, P^2, P^3, ...$ [2] The CoS is therefore the Project Manager $A^0$ for $P^0$. The purpose of this repository is to build the "level-0 rung" of the infinite harness, $H^0_0$. [3]
 
 # Duties of the CoS
 
@@ -33,7 +33,11 @@ The Infinite Ladder is its own project. We will define it as the first (so $i = 
 
 More duties will be fleshed out as we develop this harness in greater detail.
 
+# Notes
+
 [1] We will use the subscript $0$ to distinguish the primary Project, Goal, Harness, and Agent from what follows, but can abbreviate them without the subscript: $H^i = H^i_0$, $P^i = P^i_0$, $G^i = G^i_0$, $A^i = A^i_0$. 
 
-[2] Note that the goal of the Infinite Ladder is to build a Harness that is personalized to the human who controls the CoS, the resources available to that CoS, and the goals, priorities and projects personalized to that human. It will therefore make sense, eventually, for the Brainstorm Harness, based on the Tapestry protocol, to integrate with the Infinite Harness for any given user.
+[2] Examples: $P^1$ could be to build an app; $P^2$ to solve an equation; $P^3$ to build a business; etc.
+
+[3] Note that the goal of the Infinite Ladder is to build a Harness that is personalized to the human who controls the CoS, the resources available to that CoS, and the goals, priorities and projects personalized to that human. It will therefore make sense, eventually, for the Brainstorm Harness, based on the Tapestry protocol, to integrate with the Infinite Harness for any given user.
 
