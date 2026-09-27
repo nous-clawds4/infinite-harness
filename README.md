@@ -15,7 +15,7 @@ When a new Project $P^i$ is handed to the CoS, the first step is for the CoS to 
 
 The CoS then immediately launches a new Goal, designated with the subscript: $1$, $G^i_1$, with corresponding Harness $H^i_1$ and agent $A^i_1$, the purpose of which is to improve the "primary" or "baseline" harness, which we designate with the subscript $0$: $H^i = H^i_0$. [1] We may refer to these as the level-1 goal, the level-1 harness, and the level-1 agent for the Project.
 
-This process can be repeated an arbitrary number of times. For each step up to the next (the $j^{th}$ rung of the ladder, we create a a new Goal, $G^i_j$, with corresponding Harness $H^i_j$ and agent $A^i_j$ (the $j^{th}$ Rung Manager for Project $i$), with the Goal $G^i_j$ being to improve the harness of the rung below it, $H^i_(j-1)$.
+This process can be repeated an arbitrary number of times. For each step up to the next (the $j^{th}$ rung of the ladder, we create a a new Goal, $G^i_j$, with corresponding Harness $H^i_j$ and agent $A^i_j$ (the $j^{th}$ Rung Manager for Project $i$), with the Goal $G^i_j$ being to improve the harness of the rung below it, $H^i_{j-1}$.
 
 ## How many rungs in the ladder?
 
