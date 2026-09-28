@@ -22,3 +22,7 @@ Changes made to the snapshot before the first public commit:
 ## Goal protection, 2026-09-27
 
 Once the repository was public, GitHub rulesets became available. `.github/CODEOWNERS` assigns `@wds4` (David) as code owner of `README.md` (the goal, L0), `docs/hold-axis.md` (holds the L0 re-rating rule) and `.github/CODEOWNERS` itself. A ruleset on `main` requires a pull request, requires review from Code Owners (with zero general approvals), blocks force pushes and deletion, and has no bypass actors. So changes to the goal or the L0 rule need David's approval, while ordinary L3 docs can still be merged by the CoS. This only strengthens holds, so under `docs/hold-axis.md` §4 it needs no approval from above.
+
+## Organization chart, 2026-09-27
+
+Added [`docs/org-chart.md`](org-chart.md) to record the CoS's delegation of day-to-day work to the Physics Lead and Tapestry, the CoS's continuing duties, and the authorized overnight physics iteration. `README.md`, `docs/hold-axis.md` and `.github/CODEOWNERS` were not changed; README could later link to the new note.
