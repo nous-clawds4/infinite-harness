@@ -2,19 +2,39 @@
 // ih-seed.js — create the Infinite Harness (IH) concepts and a small seed set of
 // elements on a local Tapestry instance. Written by the CoS for David Strayhorn,
 // 2026-09-27. Model: nous-clawds4/infinite-harness docs/tapestry-concept-model.md
-// at 5d603359 (decisions A-E in section 7).
+// at 84e245d0 (decisions A-E in section 7; authority and rulings in section 8).
 //
 // Run INSIDE the tapestry container so calls are genuinely loopback (auth.js
 // isDirectLocal -> req.localTrusted), e.g. from the Mac host:
 //   docker exec -i -e IH_MODE=dry-run tapestry node - < ~/cos-ih/ih-seed.js
 //   docker exec -i -e IH_MODE=write   tapestry node - < ~/cos-ih/ih-seed.js
+//   docker exec -i -e IH_MODE=update  tapestry node - < ~/cos-ih/ih-seed.js
+//   docker exec -i -e IH_MODE=update -e IH_FORCE_SCHEMA=1 tapestry node - < ~/cos-ih/ih-seed.js
 // Default mode is dry-run. Stdout is one JSON summary; progress goes to stderr.
+//
+// Modes:
+//   dry-run (default)  checks and plans only; no writes. The plan includes the
+//                      update plan (which IH pointers would be re-pinned) and the
+//                      schema plan (which stored schemas differ from this script).
+//   write              creates missing ih concepts, schemas and seed elements;
+//                      skips anything that already exists.
+//   update             re-pins IH pointers (repo nous-clawds4/infinite-harness) in
+//                      the existing seed elements to IH_SHA via save-element-json.
+//                      Creates nothing. With IH_FORCE_SCHEMA=1 it also re-saves
+//                      every ih schema whose stored copy differs from this script
+//                      (this is how the section 8.4 fields land).
+//   export             read-only; prints the read-back used for graph/ih-graph.json.
+//
+// Environment: IH_BASE, IH_ROUTER_CONFIG (as before); IH_FORCE_SCHEMA=1 (update
+// mode only); IH_TAP_DEF_PATHS=<file> to read Tapestry's harness-def-paths.txt
+// from a local file instead of fetching it from GitHub at TAP_SHA.
 //
 // Steps: (a) instance up; (b) relay privacy confirmed (dcosl preset disabled, no
 // enabled up/both stream or strfry sync that could carry an IH event) -- any doubt
-// aborts before writing; (c) list existing concepts/elements and skip them;
-// (d) create ih concepts + schemas; (e) seed elements; (f) print JSON summary
-// (with a read-back export of every ih concept and element).
+// aborts before writing, in write and update modes alike; (c) list existing
+// concepts/elements and skip them; (d) create ih concepts + schemas; (e) seed
+// elements; (f) print JSON summary (with a read-back export of every ih concept
+// and element). Update mode replaces (d)-(e) with (u) re-pin + optional schema save.
 'use strict';
 const fs = require('fs');
 const crypto = require('crypto');
@@ -24,11 +44,24 @@ const BASE = process.env.IH_BASE || 'http://127.0.0.1:7778';
 const ROUTER_CONFIG_PATH = process.env.IH_ROUTER_CONFIG || '/etc/strfry-router-tapestry.config';
 const CRON_PATHS = ['/etc/crontab', '/etc/cron.d', '/var/spool/cron/crontabs', '/var/spool/cron'];
 const IH_REPO = 'nous-clawds4/infinite-harness';
-const IH_SHA = '5d603359db3239aae890dbf2e9c5888e6d39a146';
+// Public main HEAD of nous-clawds4/infinite-harness when this pin was set
+// (2026-09-27). The earlier pin, 5d603359db3239aae890dbf2e9c5888e6d39a146, now
+// resolves only in the private archive repo (docs/HISTORY.md).
+const IH_SHA = '84e245d078e1603ac8b1ff9022b936f83372652d';
+// IH paths that seed-element pointers may name. Each was checked to exist at IH_SHA;
+// update mode refuses to re-pin a pointer to any other path.
+const IH_PINNED_PATHS = ['docs/hold-axis.md', 'docs/examples/physics.md', 'docs/examples/tapestry.md'];
 const TAP_REPO = 'nous-clawds4/tapestry';
 const TAP_SHA = '1e518034a9e0277a79d27747bb26ece59c55023d';
 const PHY_REPO = 'nous-clawds4/physics';
 const PHY_SHA = '953db3b59cf420c297a2dba18ce5b19f0d81469a';
+const FORCE_SCHEMA = process.env.IH_FORCE_SCHEMA === '1';
+// Tapestry's own definition of its harness: one path per line, '#' comments.
+const TAP_DEF_PATHS_FILE = 'scripts/harness-def-paths.txt';
+const TAP_DEF_PATHS_LOCAL = process.env.IH_TAP_DEF_PATHS || '';
+// The copy baked into the running image (Dockerfile: COPY . /usr/local/lib/node_modules/brainstorm/).
+// It reflects the running code, which may not be TAP_SHA, so it is only a fallback.
+const TAP_DEF_PATHS_IMAGE = '/usr/local/lib/node_modules/brainstorm/' + TAP_DEF_PATHS_FILE;
 const IH_KINDS = [39998, 39999];
 // Firmware concepts that create-concept stamps as z tags on the core nodes it mints.
 const FIRMWARE_Z_SLUGS = ['superset', 'set', 'word', 'json-schema', 'primary-property', 'property',
@@ -38,7 +71,7 @@ const CORE_SUFFIXES = ['superset', 'schema', 'primary-property', 'properties', '
 const log = (...a) => console.error('[ih-seed]', ...a);
 const summary = { tool: 'ih-seed.js', mode: MODE, startedAt: new Date().toISOString(), base: BASE,
   model: `${IH_REPO}@${IH_SHA}:docs/tapestry-concept-model.md`, checks: {}, plan: {}, created: { concepts: [], schemas: [], elements: [] },
-  skipped: { concepts: [], elements: [] }, failures: [], aborted: null };
+  updated: { elements: [], schemas: [] }, skipped: { concepts: [], elements: [] }, failures: [], aborted: null };
 
 // ── helpers ───────────────────────────────────────────────────
 function slug(name) { // == src/lib/dtag.js slug()
@@ -68,6 +101,7 @@ function finish(code) {
   log('DIGEST ' + JSON.stringify({ mode: MODE, aborted: summary.aborted, instance: summary.checks.instance, endpointsOk: summary.checks.endpoints && Object.values(summary.checks.endpoints).every((p) => p.ok),
     relay: rp && { ok: rp.ok, dcosl: rp.dcoslPreset, problems: rp.problems, outbound: (rp.outboundStreams || []).map((s) => `${s.source}:${s.name}:${s.dir}:${s.couldCarryIH ? 'COULD-CARRY' : 'excluded'}(${s.why})`), notes: rp.notes },
     plan: summary.plan && summary.plan.counts, created: { concepts: summary.created.concepts.length, schemas: summary.created.schemas.length, elements: summary.created.elements.length },
+    updated: { elements: summary.updated.elements.length, schemas: summary.updated.schemas.length }, tapHarnessPaths: summary.checks.tapHarnessPaths && { source: summary.checks.tapHarnessPaths.source, count: summary.checks.tapHarnessPaths.count },
     skipped: { concepts: summary.skipped.concepts.length, elements: summary.skipped.elements.length }, failures: summary.failures,
     reused: summary.checks.reusedConcepts, notReusedPresent: summary.checks.notReused, exportConcepts: summary.export ? summary.export.map((c) => `${c.name}:${c.elements.length}`) : null }));
   // Exit only after stdout has flushed: a piped stdout is asynchronous, and exiting
@@ -76,6 +110,64 @@ function finish(code) {
 }
 const repoPtr = (repo, sha, path, branch = 'main', anchor) => ({ locatorKind: 'repository',
   locator: `github.com/${repo}@${sha}:${path}${anchor ? '#' + anchor : ''}`, repo, branch, commit: sha, path, ...(anchor ? { anchor } : {}) });
+// Canonical JSON (sorted keys) for comparing stored and intended JSON.
+function canon(v) {
+  if (Array.isArray(v)) return '[' + v.map(canon).join(',') + ']';
+  if (v && typeof v === 'object') return '{' + Object.keys(v).sort().map((k) => JSON.stringify(k) + ':' + canon(v[k])).join(',') + '}';
+  return JSON.stringify(v);
+}
+// Re-pin every IH pointer inside a record's JSON to IH_SHA. Returns { json, changes, problems };
+// the input is not modified. Only pointers with repo === IH_REPO are touched, and only to a
+// path in IH_PINNED_PATHS; everything else in the record is kept exactly as stored.
+function repinIH(json) {
+  const out = JSON.parse(JSON.stringify(json)); const changes = []; const problems = [];
+  (function walk(o, at) {
+    if (Array.isArray(o)) { o.forEach((v, i) => walk(v, `${at}[${i}]`)); return; }
+    if (!o || typeof o !== 'object') return;
+    if (o.locatorKind === 'repository' && o.repo === IH_REPO) {
+      if (!IH_PINNED_PATHS.includes(o.path)) problems.push(`${at}: IH path ${JSON.stringify(o.path)} is not in IH_PINNED_PATHS`);
+      else if (o.commit !== IH_SHA) {
+        const locator = `github.com/${IH_REPO}@${IH_SHA}:${o.path}${o.anchor ? '#' + o.anchor : ''}`;
+        changes.push({ at, path: o.path, fromCommit: o.commit, toCommit: IH_SHA, fromLocator: o.locator, toLocator: locator });
+        o.commit = IH_SHA; o.locator = locator; o.branch = o.branch || 'main';
+      }
+      return;
+    }
+    for (const k of Object.keys(o)) walk(o[k], at ? `${at}.${k}` : k);
+  })(out, '');
+  return { json: out, changes, problems };
+}
+// Tapestry's harness-definition paths, read from scripts/harness-def-paths.txt. Sources, in
+// order: IH_TAP_DEF_PATHS (a local file); GitHub at TAP_SHA (matches the pin exactly); the copy
+// in the running image (may differ from TAP_SHA; recorded as unpinned). Returns
+// { paths | null, source, pinned, problems }.
+function parseDefPaths(text) {
+  return text.split('\n').map((l) => l.replace(/#.*$/, '').trim()).filter(Boolean);
+}
+async function loadTapHarnessPaths() {
+  const problems = [];
+  const accept = (text, source, pinned) => {
+    const paths = parseDefPaths(text);
+    if (paths.length === 0) { problems.push(`${source}: no paths found`); return null; }
+    const bad = paths.filter((p) => p.startsWith('/') || p.includes('..') || /\s/.test(p));
+    if (bad.length) { problems.push(`${source}: unexpected lines ${JSON.stringify(bad)}`); return null; }
+    return { paths, source, pinned, count: paths.length, problems };
+  };
+  if (TAP_DEF_PATHS_LOCAL) {
+    try { const r = accept(fs.readFileSync(TAP_DEF_PATHS_LOCAL, 'utf8'), `file:${TAP_DEF_PATHS_LOCAL}`, false); if (r) return r; }
+    catch (e) { problems.push(`IH_TAP_DEF_PATHS unreadable: ${e.message}`); }
+    return { paths: null, source: null, pinned: false, count: 0, problems }; // explicit file requested: no silent fallback
+  }
+  const url = `https://raw.githubusercontent.com/${TAP_REPO}/${TAP_SHA}/${TAP_DEF_PATHS_FILE}`;
+  try {
+    const res = await fetch(url);
+    if (res.status === 200) { const r = accept(await res.text(), url, true); if (r) return r; }
+    else problems.push(`${url}: HTTP ${res.status}`);
+  } catch (e) { problems.push(`${url}: ${e.message}`); }
+  try { const r = accept(fs.readFileSync(TAP_DEF_PATHS_IMAGE, 'utf8'), `file:${TAP_DEF_PATHS_IMAGE}`, false); if (r) return r; }
+  catch (e) { problems.push(`${TAP_DEF_PATHS_IMAGE} unreadable: ${e.message}`); }
+  return { paths: null, source: null, pinned: false, count: 0, problems };
+}
 
 // ── the model: concepts (decision A: links hold addresses; B: pinned pointers) ──
 const ADDR = { type: 'string', description: 'address of the linked record (39999:<pubkey>:<d-tag>)' };
@@ -85,10 +177,12 @@ const POINTER = { type: 'object', description: 'pointer out of the graph: locato
     repo: { type: 'string' }, branch: { type: 'string' }, commit: { type: 'string' }, path: { type: 'string' }, anchor: { type: 'string' } } };
 const POINTERS = { type: 'array', items: POINTER, description: 'pointers out of the graph' };
 const S = (d) => ({ type: 'string', description: d });
+const HEX64 = (d) => ({ type: 'string', pattern: '^[0-9a-f]{64}$', description: d });
 const CONCEPTS = [
   { name: 'ih project', plural: 'ih projects',
     description: 'An Infinite Harness project P^i: one body of work, usually a repo, whose harness is improved by a ladder of rungs. The record holds the project index and status and links to its goal, base harness and agent. The project files stay in git and are reached by pointers.',
     fields: { index: { type: 'integer', description: 'the project index i (0 is the ladder itself)' }, status: S('active, paused or closed'), openedOn: S('date the project joined IH'),
+      authority: HEX64('hex pubkey of the project authority, whose signature is required on the project\'s L0 and L1 rulings. An L0 item: this field only mirrors the anchor in the IH git repo, which is what the harness trusts; a mismatch is a failure (tapestry-concept-model.md section 8.2). Recorded only when the authority records or confirms it.'),
       goal: ADDR, baseHarness: ADDR, agent: ADDR, repository: POINTER, pointers: POINTERS }, required: ['index'] },
   { name: 'ih harness', plural: 'ih harnesses',
     description: 'One version of a harness H^i_j: the agents, rules, workflows and checks that do a project\'s work (j = 0) or improve the harness below (j > 0). The harness text stays in git; the record pins it to a commit and points at each harness-definition path.',
@@ -126,8 +220,13 @@ const CONCEPTS = [
     fields: { item: ADDR, from: ADDR, to: ADDR, direction: { type: 'string', enum: ['promote', 'demote'] }, reason: S('why'), proposedBy: S('who proposed it'), ruling: ADDR, ratedOn: S('date') },
     required: ['item', 'to', 'direction'] },
   { name: 'ih ruling', plural: 'ih rulings',
-    description: 'A decision, approve or refuse, on a hold rating or a harness change, by the level above the proposer (the human for anything at L0-L1 or touching a goal). The ruling points at the git commit or PR where it was made; git, not the graph signature, is the proof.',
-    fields: { decision: { type: 'string', enum: ['approve', 'refuse'] }, reason: S('why'), ruledBy: S('who ruled'), ruledOn: S('date'), decides: ADDR, evidence: POINTERS }, required: ['decision', 'decides'] },
+    description: 'A decision, approve or refuse, on a hold rating or a harness change, by the level above the proposer (the project authority for anything at L0-L1 or touching a goal). A ruling on an L0 or L1 item counts only if it is a nostr event signed by the project authority\'s key, read from the git anchor, and the signature verifies; a record signed by the Tapestry Assistant, a git commit or a chat message can report such a ruling but is not one. Below L1 a TA-signed record is acceptable. The ruling also points at the commit or PR that carries the change out: the signature says who decided, git shows what changed (tapestry-concept-model.md section 8.3).',
+    fields: { decision: { type: 'string', enum: ['approve', 'refuse'] }, reason: S('why'), ruledBy: S('human-readable label only; never used for verification (the event pubkey is)'), ruledOn: S('date'), decides: ADDR,
+      project: { ...ADDR, description: 'address of the ih project record the ruling is for' }, level: { ...ADDR, description: 'address of the ih hold level record (L0-L4) of the item decided; must match the item\'s current level' },
+      evidence: POINTERS }, required: ['decision', 'decides', 'project', 'level'],
+    // The concept header's description cannot be rewritten in place through the normalize API, so on an
+    // instance created before this fix the ruling schema carries the corrected rule (section 8.3).
+    schemaDescription: 'A ruling on an L0 or L1 item counts only if it is a nostr event signed by the project authority\'s key (read from the IH git anchor, not from the graph) and the signature verifies. A TA-signed record can report such a ruling but is not one (tapestry-concept-model.md section 8.3).' },
   { name: 'ih score', plural: 'ih scores',
     description: 'A score S^i_j that rung j uses to tell a better harness below it from a worse one: how it is computed, whether it is held out from the rung being scored, and which direction is better.',
     fields: { method: S('how it is computed'), heldOut: { type: 'boolean' }, direction: { type: 'string', enum: ['higher', 'lower'] }, rung: ADDR, computedBy: POINTER } },
@@ -137,7 +236,7 @@ const CONCEPTS = [
 ];
 for (const c of CONCEPTS) {
   c.slug = slug(c.name); c.key = keyName(c.name);
-  c.schema = { type: 'object', properties: { [c.key]: { type: 'object', title: c.name.replace(/\b\w/g, (m) => m.toUpperCase()),
+  c.schema = { type: 'object', properties: { [c.key]: { type: 'object', title: c.name.replace(/\b\w/g, (m) => m.toUpperCase()), ...(c.schemaDescription ? { description: c.schemaDescription } : {}),
     required: ['name', 'slug', 'description', ...(c.required || [])],
     properties: { name: S('the record name'), slug: S('stable identity derived from the name'), description: S('a short description'), ...c.fields },
     'x-tapestry': { unique: ['slug'] } } }, required: [c.key] };
@@ -153,14 +252,11 @@ const HOLD = [
   ['L3', 'Disclosed', 'An agent may change it', 'Open disclosure, with reasons, where readers will see it (for example, in the artifact\'s own changelog); reviewable after the fact'],
   ['L4', 'Free', 'An agent may change it', 'Nothing beyond the log (commit or PR history)'],
 ];
-const TAP_HARNESS_PATHS = ['CLAUDE.md', 'AGENTS.md', 'engineering-team/README.md', 'engineering-team/roles', 'engineering-team/workflows', 'engineering-team/templates',
-  'engineering-team/CHANGELOG.md', 'product-team/README.md', 'product-team/roles', 'product-team/workflows', 'product-team/templates', 'product-team/guardrails',
-  '.claude/agents', '.claude/commands', '.claude/skills', '.claude/settings.json', 'scripts/whats-open.sh', 'scripts/session-start.sh', 'scripts/harness-lint.sh',
-  'scripts/harness-stats.sh', 'scripts/lib', 'scripts/harness-lint-waivers.txt', 'scripts/harness-budgets.txt', 'scripts/harness-def-paths.txt', 'scripts/long-lived-branches.txt'];
+// Tapestry harness paths are read from Tapestry's scripts/harness-def-paths.txt at run time (loadTapHarnessPaths).
 const PHY_HARNESS_PATHS = ['papers', 'public-papers/observer-space-framework', 'public-papers/observer-space-framework/versions', 'public-papers/observer-space-framework/reviews'];
 
 function conceptAddr(ta, c) { return `39998:${ta}:${c.slug}`; }
-function buildElements(ta) {
+function buildElements(ta, tapPaths) {
   const C = Object.fromEntries(CONCEPTS.map((c) => [c.name, c]));
   const el = (conceptName, name, fields) => {
     const c = C[conceptName]; const cAddr = conceptAddr(ta, c); const dTag = `${slug(name)}-${hash8(cAddr)}`;
@@ -178,7 +274,7 @@ function buildElements(ta) {
     locators: [...PHY_HARNESS_PATHS.map((p) => repoPtr(PHY_REPO, PHY_SHA, p)), repoPtr(IH_REPO, IH_SHA, 'docs/examples/physics.md')] }));
   out.push(el('ih harness', H2, { description: 'The base harness of the Tapestry repo as of 2026-09-27: Engineering Team Mode, the Product Team flow, CI and the main-source guard, the release flow, the ledger, and the self-improvement machinery. The harness is defined by scripts/harness-def-paths.txt; one locator per path.',
     project: addrOf('ih project', P2), j: 0, version: TAP_SHA, branch: 'main', status: 'current',
-    locators: [...TAP_HARNESS_PATHS.map((p) => repoPtr(TAP_REPO, TAP_SHA, p)), repoPtr(IH_REPO, IH_SHA, 'docs/examples/tapestry.md')] }));
+    locators: [...(tapPaths || []).map((p) => repoPtr(TAP_REPO, TAP_SHA, p)), repoPtr(IH_REPO, IH_SHA, 'docs/examples/tapestry.md')] }));
   out.push(el('ih project', P1, { description: 'Project P^1: David Strayhorn\'s physics program, a precise theory of the observer from which the Born rule is derived, not assumed.',
     index: 1, status: 'active', baseHarness: addrOf('ih harness', H1), repository: repoPtr(PHY_REPO, PHY_SHA, ''),
     pointers: [repoPtr(IH_REPO, IH_SHA, 'docs/examples/physics.md')] }));
@@ -294,7 +390,8 @@ async function checkRelayPrivacy(ta) {
 
 // ── main ──────────────────────────────────────────────────────
 (async () => {
-  if (!['dry-run', 'write', 'export'].includes(MODE)) return abort(`unknown mode ${MODE}`);
+  if (!['dry-run', 'write', 'update', 'export'].includes(MODE)) return abort(`unknown mode ${MODE}`);
+  if (FORCE_SCHEMA && MODE !== 'update') return abort('IH_FORCE_SCHEMA=1 is only valid with IH_MODE=update');
   log(`mode=${MODE} base=${BASE}`);
   // (a) instance up
   const pk = await api('GET', '/api/assistant/pubkey').catch((e) => ({ status: 0, json: { error: e.message } }));
@@ -320,7 +417,11 @@ async function checkRelayPrivacy(ta) {
   summary.checks.reusedConcepts = REUSED.map((n) => ({ name: n, present: byName.has(n), address: byName.get(n)?.handle || null, elements: byName.get(n)?.elementCount ?? null }));
   summary.checks.notReused = NOT_REUSED.map((n) => ({ name: n, present: byName.has(n) }));
   const coreAddrs = []; for (const c of CONCEPTS) { coreAddrs.push(conceptAddr(ta, c)); for (const s of CORE_SUFFIXES) coreAddrs.push(`39999:${ta}:${c.slug}-${s}`); }
-  const elements = buildElements(ta);
+  const tapDef = await loadTapHarnessPaths();
+  summary.checks.tapHarnessPaths = { source: tapDef.source, pinned: tapDef.pinned, count: tapDef.count, paths: tapDef.paths, problems: tapDef.problems };
+  if (!tapDef.paths) log(`WARNING: Tapestry harness-def paths unavailable: ${tapDef.problems.join('; ')}`);
+  else if (!tapDef.pinned) log(`WARNING: Tapestry harness-def paths read from ${tapDef.source}, which may not match TAP_SHA ${TAP_SHA.slice(0, 8)}`);
+  const elements = buildElements(ta, tapDef.paths);
   const existingRows = await cypherRead('MATCH (n:NostrEvent) WHERE n.uuid IN $u RETURN n.uuid AS uuid, n.name AS name', { u: [...coreAddrs, ...elements.map((e) => e.address)] });
   const existing = new Set(existingRows.map((r) => r.uuid));
   const planConcepts = [];
@@ -336,8 +437,74 @@ async function checkRelayPrivacy(ta) {
     counts: { conceptsToCreate: planConcepts.filter((p) => p.action === 'create').length, conceptsExisting: planConcepts.filter((p) => p.action !== 'create').length,
       elementsToCreate: planElements.filter((p) => p.action === 'create').length, elementsExisting: planElements.filter((p) => p.action !== 'create').length } };
   summary.elementsPlanned = elements; // full json, for review and for the graph/ export
+  // Update plan (read-only): which existing seed elements carry an IH pointer that is not
+  // pinned to IH_SHA, and which stored schemas differ from this script's.
+  const existingEls = elements.filter((e) => existing.has(e.address));
+  const storedRows = existingEls.length ? await cypherRead("MATCH (e:NostrEvent) WHERE e.uuid IN $u OPTIONAL MATCH (e)-[:HAS_TAG]->(j:NostrEventTag {type: 'json'}) RETURN e.uuid AS uuid, head(collect(j.value)) AS json", { u: existingEls.map((e) => e.address) }) : [];
+  const storedJson = new Map(storedRows.map((r) => { let j = null; try { j = JSON.parse(r.json); } catch {} return [r.uuid, j]; }));
+  const updatePlan = existingEls.map((e) => {
+    const cur = storedJson.get(e.address);
+    if (!cur || typeof cur !== 'object') return { concept: e.concept, name: e.name, address: e.address, action: 'unreadable', problems: ['stored json tag missing or not inline JSON'] };
+    const r = repinIH(cur);
+    return { concept: e.concept, name: e.name, address: e.address, action: r.problems.length ? 'refuse' : (r.changes.length ? 'repin' : 'unchanged'), changes: r.changes, problems: r.problems, json: r.json };
+  });
+  const h2 = existingEls.find((e) => e.name === 'H2_0 tapestry base harness');
+  if (h2 && tapDef.paths && storedJson.get(h2.address)) {
+    const stored = ((Object.values(storedJson.get(h2.address))[0] || {}).locators || []).filter((l) => l.repo === TAP_REPO).map((l) => l.path);
+    summary.checks.h2LocatorDrift = { storedNotInDefPaths: stored.filter((p) => !tapDef.paths.includes(p)), defPathsNotStored: tapDef.paths.filter((p) => !stored.includes(p)),
+      note: 'reported only; update mode re-pins IH pointers and does not change Tapestry locators' };
+  }
+  const schemaPlan = [];
+  for (const p of planConcepts) {
+    const c = CONCEPTS.find((x) => x.name === p.name);
+    if (p.action === 'create') { schemaPlan.push({ concept: c.name, action: 'absent' }); continue; }
+    if (p.schema !== 'check') { schemaPlan.push({ concept: c.name, action: 'leave', reason: 'a concept of this name exists under another address' }); continue; }
+    const rows = await cypherRead("MATCH (n:NostrEvent {uuid: $u}) OPTIONAL MATCH (n)-[:HAS_TAG]->(t:NostrEventTag {type: 'json'}) RETURN head(collect(t.value)) AS json", { u: `39999:${ta}:${c.slug}-schema` });
+    let stored = null; try { stored = JSON.parse(rows[0]?.json || 'null')?.jsonSchema?.properties?.[c.key] || null; } catch {}
+    const want = c.schema.properties[c.key];
+    const missingFields = Object.keys(want.properties).filter((k) => !(stored && stored.properties && k in stored.properties));
+    const differs = !stored || canon(stored) !== canon(want);
+    schemaPlan.push({ concept: c.name, action: differs ? 'differs' : 'same', missingFields });
+  }
+  summary.plan.update = updatePlan.map(({ json, ...rest }) => rest);
+  summary.plan.schemas = schemaPlan;
+  summary.plan.counts.elementsToRepin = updatePlan.filter((u) => u.action === 'repin').length;
+  summary.plan.counts.schemasDiffering = schemaPlan.filter((x) => x.action === 'differs').length;
   if (MODE === 'dry-run') { log('dry run complete; no writes'); return finish(0); }
   if (MODE === 'export') { delete summary.elementsPlanned; await readBack(ta); log('export complete; no writes'); return finish(0); }
+  if (MODE === 'update') {
+    delete summary.elementsPlanned;
+    // Update creates nothing: every ih concept and seed element must already exist.
+    const absentC = planConcepts.filter((p) => p.action === 'create').map((p) => p.name);
+    const absentE = planElements.filter((p) => p.action === 'create').map((p) => p.name);
+    if (absentC.length || absentE.length) return abort(`update mode creates nothing; run write mode first (absent concepts: ${absentC.join(', ') || 'none'}; absent elements: ${absentE.join(', ') || 'none'})`);
+    const blocked = updatePlan.filter((u) => u.action === 'refuse' || u.action === 'unreadable');
+    if (blocked.length) return abort('update refused before any write: ' + blocked.map((u) => `${u.name}: ${u.problems.join('; ')}`).join(' | '));
+    // (u1) schemas, only when forced: re-save every ih schema whose stored copy differs.
+    if (FORCE_SCHEMA) {
+      for (const sp of schemaPlan.filter((x) => x.action === 'differs')) {
+        const c = CONCEPTS.find((x) => x.name === sp.concept);
+        log(`save-schema ${c.name} (forced; missing fields: ${sp.missingFields.join(', ') || 'none'})`);
+        const r = await api('POST', '/api/normalize/save-schema', { concept: c.name, schema: c.schema });
+        if (r.status !== 200 || !r.json || !r.json.success) { summary.failures.push({ step: 'save-schema', name: c.name, status: r.status, response: r.json }); return abort(`save-schema failed for ${c.name}`); }
+        summary.updated.schemas.push({ concept: c.name, addedFields: sp.missingFields, schemaNode: r.json.schemaUuid, primaryProperty: r.json.primaryProperty });
+      }
+    } else if (schemaPlan.some((x) => x.action === 'differs')) {
+      log('schemas differ from this script; not re-saved (set IH_FORCE_SCHEMA=1 to re-save them)');
+    }
+    // (u2) re-pin IH pointers in the existing seed elements.
+    for (const u of updatePlan.filter((x) => x.action === 'repin')) {
+      log(`save-element-json ${u.concept} / ${u.name} (${u.changes.length} IH pointer${u.changes.length === 1 ? '' : 's'})`);
+      const r = await api('POST', '/api/normalize/save-element-json', { uuid: u.address, json: u.json });
+      if (r.status !== 200 || !r.json || !r.json.success) { summary.failures.push({ step: 'save-element-json', name: u.name, status: r.status, response: r.json }); return abort(`save-element-json failed for ${u.name}`); }
+      summary.updated.elements.push({ concept: u.concept, name: u.name, address: u.address, changes: u.changes.map((c) => ({ at: c.at, path: c.path, fromCommit: c.fromCommit, toCommit: c.toCommit })) });
+    }
+    await readBack(ta);
+    return finish(summary.failures.length ? 1 : 0);
+  }
+  if (!tapDef.paths && planElements.some((p) => p.name === 'H2_0 tapestry base harness' && p.action === 'create')) {
+    return abort(`cannot create H2_0: Tapestry ${TAP_DEF_PATHS_FILE} unavailable (${tapDef.problems.join('; ')}); set IH_TAP_DEF_PATHS=<file> to supply it`);
+  }
 
   // (d) concepts + schemas
   for (const p of planConcepts) {
