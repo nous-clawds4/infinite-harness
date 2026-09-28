@@ -26,3 +26,7 @@ Once the repository was public, GitHub rulesets became available. `.github/CODEO
 ## Organization chart, 2026-09-27
 
 Added [`docs/org-chart.md`](org-chart.md) to record the CoS's delegation of day-to-day work to the Physics Lead and Tapestry, the CoS's continuing duties, and the authorized overnight physics iteration. `README.md`, `docs/hold-axis.md` and `.github/CODEOWNERS` were not changed; README could later link to the new note.
+
+## Project authorities, 2026-09-27
+
+David confirmed on 2026-09-27 at 9:59 PM ET that he is the authority for every project: $P^0$ (the Infinite Harness ladder), $P^1$ (physics) and $P^2$ (Tapestry). His identities are nostr straycat (`npub1u5njm6g5h5cpw4wy8xugu62e5s7f6fnysv0sj0z3a8rengt2zqhsxrldq3`, hex `e5272de914bd301755c439b88e6959a43c9d2664831f093c51e9c799a16a102f`) and GitHub `@wds4`. [`docs/authority.md`](authority.md) records this as the L0 git anchor that `docs/tapestry-concept-model.md` §8.2 describes, and `.github/CODEOWNERS` now assigns it to `@wds4`. The change touches a code-owned file, so it takes effect only with David's approval. `docs/examples/tapestry.md`, `docs/org-chart.md`, `docs/tapestry-concept-model.md` and `graph/README.md` now point to it instead of saying the authority is proposed or not recorded. `README.md` and `docs/hold-axis.md` were not changed.
