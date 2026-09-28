@@ -4,8 +4,10 @@
 #
 # README.md holds the goal of the Infinite Harness (L0).
 # docs/hold-axis.md holds the re-rating rule, which is L0 (hold-axis §4); the whole file is owned.
+# docs/authority.md records each project's authority key (L0; tapestry-concept-model.md section 8.2).
 # This file is owned too, so the protection cannot be removed without the same approval.
 
 /README.md          @wds4
 /docs/hold-axis.md  @wds4
+/docs/authority.md  @wds4
 /.github/CODEOWNERS @wds4
