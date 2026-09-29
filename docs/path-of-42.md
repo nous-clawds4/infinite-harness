@@ -44,7 +44,7 @@ This generalizes the essay's instruction to "give up the highest-numbered layer 
 3. Go up only as far as necessary. Nodes below the given-up one are kept but leave the current selection until re-attached.
 4. **The root is never given up.**
 
-Giving up a node changes it, so it needs what its level requires (§6); an L0 or L1 node needs David.
+Giving up a node changes it, so it needs what its level requires (§6); an L0 or L1 node needs David. §9 proposes a finer rule for which step to give up first.
 
 ## 6. Posing the next question, and who rules
 
@@ -79,12 +79,33 @@ hold: L2
 tag: method           # definition | math-tool | method | physical-hypothesis
 rationale: No preferred frame (GR); the Copernican lesson.
 reopen_if: null       # required when rejected
+q: 0.95               # §9: is the question worth asking?
+a: 0.8                # §9: is this the best answer?
 ```
 
 Add one file per paper version listing the answers it selects. Git then records every status and level change (hold-axis §6).
 
 **Later, migrate into Tapestry's concept graph.** The IH already points its concepts at Tapestry ([`graph/`](../graph/), [`tapestry-concept-model.md`](tapestry-concept-model.md)). Questions and answers would become new `ih` concepts (**proposal**), with the files staying in git and the graph holding structure and commit-pinned pointers. Rulings on L0 and L1 nodes use the existing `ih ruling`.
 
+## 9. Hold number (proposal)
+
+*David's idea, added as a proposal with his approval on 2026-09-29.*
+
+Each question-to-answer step gets two ratings in $[0, 1]$: $q$, how sure we are that the question is worth asking, and $a$, how sure we are that the chosen answer is best. Each node's hold number is
+
+$$h(\text{child}) = h(\text{parent}) \times q \times a, \qquad h(\text{root}) = 1.$$
+
+With several parents, use the weakest parent's $h$. Because $q$ and $a$ are at most 1, $h$ can only fall going down a path, which enforces "a child is never held more strongly than its parent". It reads like the probability that the whole path to that node is right.
+
+**Backtracking.** When stuck, give up the step with the lowest $q \times a$ first, not simply the deepest one. A low $q$ suggests the wrong question; a low $a$, the wrong answer.
+
+**Calibration.** Start coarse: high, medium or low, mapped for example to 0.95, 0.8 and 0.5 (an example, not a fixed mapping). Whoever rules on a node sets its ratings, and ratings near the top of the graph need David's signature.
+
+**Relation to L0–L4.** $h$ is a finer-grained measure inside the hold axis, not a replacement for it. A node's L-level still says who may change it, and the hold-axis rules still govern every change.
+
+**Pilot.** The physics pilot will record a rough $q$ and $a$ for each node, to test whether the numbers feel right.
+
 ## Changelog
 
 - 2026-09-29: created by the CoS (L3) as a proposal, from David's notes in `wds4/physics` (*Statement of the Problem* v0.5). Awaiting David's review.
+- 2026-09-29: the CoS (L3) added §9, "Hold number (proposal)", David's idea, with his approval, and added `q` and `a` to the node example in §8.
