@@ -4,14 +4,15 @@
 
 ## Organization on 2026-09-27
 
-At about 8:10 PM ET, following the harness protocol, the Chief of Staff (the rung above the projects) delegated day-to-day project work to two project-lead agents that report to it:
+At about 8:10 PM ET, following the harness protocol, the Chief of Staff (the rung above the projects) delegated day-to-day project work to three project-lead agents that report to it:
 
 - **Physics Lead** runs project $P^1$, the physics program in [`nous-clawds4/physics`](https://github.com/nous-clawds4/physics). This includes the paper review loop and the Geometry, Ontology and Literature agents.
 - **Tapestry** is the project-lead agent for project $P^2$, the management of the Tapestry repo [`nous-clawds4/tapestry`](https://github.com/nous-clawds4/tapestry), described in [`examples/tapestry.md`](examples/tapestry.md). Here "Tapestry" is the agent's name. It does not mean the Tapestry software or any Tapestry instance.
+- **Path 42** is the project-lead agent and Product Manager for project $P^3$, the Path 42 Project, described in [`projects/path-42.md`](projects/path-42.md).
 
-The project leads work at the hold levels already defined in [`hold-axis.md`](hold-axis.md). L0 and L1 items still require sign-off from the recorded authority for the project, given as a nostr ruling signed with that authority's key ([`tapestry-concept-model.md`](tapestry-concept-model.md) §8.3). For every project ($P^0$, $P^1$ and $P^2$) that authority is David (as straycat, GitHub `@wds4`), recorded as an L0 item in [`authority.md`](authority.md) ([`tapestry-concept-model.md`](tapestry-concept-model.md) §8.2). A project lead may propose a change by pull request; proposing it does not replace the required sign-off.
+The project leads work at the hold levels already defined in [`hold-axis.md`](hold-axis.md). L0 and L1 items still require sign-off from the recorded authority for the project, given as a nostr ruling signed with that authority's key ([`tapestry-concept-model.md`](tapestry-concept-model.md) §8.3). For every project ($P^0$, $P^1$, $P^2$ and $P^3$) that authority is David (as straycat, GitHub `@wds4`), recorded as an L0 item in [`authority.md`](authority.md) ([`tapestry-concept-model.md`](tapestry-concept-model.md) §8.2). A project lead may propose a change by pull request; proposing it does not replace the required sign-off.
 
-The CoS keeps its own duties. It maintains this repository, adds ladders and rungs, allocates resources such as Claude review quota and agent time, and audits both project leads. The audit follows the harness rule that each rung audits the rung below it.
+The CoS keeps its own duties. It maintains this repository, adds ladders and rungs, allocates resources such as Claude review quota and agent time, and audits all project leads. The audit follows the harness rule that each rung audits the rung below it.
 
 ## Authorized overnight physics iteration
 
@@ -24,3 +25,4 @@ This authorization concerns the overnight iteration and does not change the proj
 - 2026-09-27: added by the CoS (L3) to record the organization and the authorized overnight physics iteration.
 - 2026-09-27 (night): the CoS (L3) aligned the physics authority wording with `tapestry-concept-model.md` §8.2 (a proposed value awaiting David's confirmation), noted that no authority is recorded yet for $P^0$ or $P^2$, and made clear that "Tapestry" here names the $P^2$ project-lead agent, not the product.
 - 2026-09-27 (late night): the CoS (L3) replaced the proposed physics authority and the "not recorded" note for $P^0$ and $P^2$ with a pointer to [`authority.md`](authority.md), which records David (straycat) as the authority for all three projects, as he confirmed at 9:59 PM ET.
+- 2026-09-29: added Path 42 as the project-lead agent and Product Manager for $P^3$, reporting to the Chief of Staff.

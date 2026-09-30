@@ -34,3 +34,7 @@ David confirmed on 2026-09-27 at 9:59 PM ET that he is the authority for every p
 ## The Path of 42 (proposal), 2026-09-29
 
 Added [`docs/path-of-42.md`](path-of-42.md), a write-up of David's proposed IH method, the Path of 42: a graph of question and answer nodes, mapped onto the hold axis. It is a proposal awaiting his review. `README.md`, `docs/hold-axis.md`, `docs/authority.md` and `.github/CODEOWNERS` were not changed; README could later link to the new note.
+
+## The Path 42 Project (planning), 2026-09-29
+
+Registered $P^3$, the Path 42 Project, with David Strayhorn (`@wds4`) as its authority and Path 42 as its project-lead agent and Product Manager reporting to the Chief of Staff. Added the planning-only project note at [`docs/projects/path-42.md`](projects/path-42.md). No build work is authorized: phase 1 is planning and a Brainstorm WoT readiness assessment, phase 2 is a pitch to David, and implementation waits for his go. `README.md`, `docs/hold-axis.md` and `.github/CODEOWNERS` were not changed.
