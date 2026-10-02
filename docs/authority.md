@@ -11,6 +11,7 @@ David Strayhorn is the authority for every project. He confirmed this on 2026-09
 | $P^0$: the Infinite Harness ladder (this repo, [`nous-clawds4/infinite-harness`](https://github.com/nous-clawds4/infinite-harness)) | David Strayhorn (straycat) | `e5272de914bd301755c439b88e6959a43c9d2664831f093c51e9c799a16a102f` | `npub1u5njm6g5h5cpw4wy8xugu62e5s7f6fnysv0sj0z3a8rengt2zqhsxrldq3` | [`@wds4`](https://github.com/wds4) |
 | $P^1$: physics ([`nous-clawds4/physics`](https://github.com/nous-clawds4/physics)) | David Strayhorn (straycat) | `e5272de914bd301755c439b88e6959a43c9d2664831f093c51e9c799a16a102f` | `npub1u5njm6g5h5cpw4wy8xugu62e5s7f6fnysv0sj0z3a8rengt2zqhsxrldq3` | [`@wds4`](https://github.com/wds4) |
 | $P^2$: Tapestry ([`nous-clawds4/tapestry`](https://github.com/nous-clawds4/tapestry)) | David Strayhorn (straycat) | `e5272de914bd301755c439b88e6959a43c9d2664831f093c51e9c799a16a102f` | `npub1u5njm6g5h5cpw4wy8xugu62e5s7f6fnysv0sj0z3a8rengt2zqhsxrldq3` | [`@wds4`](https://github.com/wds4) |
+| $P^3$: the Path 42 Project ([`docs/projects/path-42.md`](projects/path-42.md)) | David Strayhorn (straycat) | `e5272de914bd301755c439b88e6959a43c9d2664831f093c51e9c799a16a102f` | `npub1u5njm6g5h5cpw4wy8xugu62e5s7f6fnysv0sj0z3a8rengt2zqhsxrldq3` | [`@wds4`](https://github.com/wds4) |
 
 The npub is the one listed for David in Tapestry's `BIBLE.md` §20. The hex pubkey is its NIP-19 decoding, and it re-encodes to the same npub (checked with nostr-tools `nip19` and with an independent bech32 decoder).
 
@@ -50,3 +51,4 @@ The harness checks this file's **history** as well as its current value: every c
 ## Changelog
 
 - 2026-09-27: created by the CoS at David's direction, recording David Strayhorn (straycat, `@wds4`) as the authority for $P^0$, $P^1$ and $P^2$. David confirmed this at 9:59 PM ET. This is the first recorded value for each project, so no prior ruling was needed. It takes effect on merge with his code-owner approval.
+- 2026-09-29: added $P^3$, the Path 42 Project, with David Strayhorn (straycat, `@wds4`) as its authority. This is the first recorded value for the project, so no prior ruling was needed. It takes effect on merge with his code-owner approval.
