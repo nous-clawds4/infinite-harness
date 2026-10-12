@@ -2,6 +2,7 @@
 
 **Source:** David Strayhorn, 2026-10-11, 10:33 AM ET (relayed to Physics Lead in chat, recorded by Chief of Staff; not signed).
 **Applies to:** every project and every rung of the harness.
+**Companion:** [creative-tweaks.md](creative-tweaks.md).
 
 ## David's words
 
