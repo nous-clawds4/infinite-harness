@@ -12,7 +12,7 @@ At about 8:10 PM ET, following the harness protocol, the Chief of Staff (the run
 
 The project leads work at the hold levels already defined in [`hold-axis.md`](hold-axis.md). L0 and L1 items still require sign-off from the recorded authority for the project, given as a nostr ruling signed with that authority's key ([`tapestry-concept-model.md`](tapestry-concept-model.md) §8.3). For every project ($P^0$, $P^1$, $P^2$ and $P^3$) that authority is David (as straycat, GitHub `@wds4`), recorded as an L0 item in [`authority.md`](authority.md) ([`tapestry-concept-model.md`](tapestry-concept-model.md) §8.2). A project lead may propose a change by pull request; proposing it does not replace the required sign-off.
 
-The CoS keeps its own duties. It maintains this repository, adds ladders and rungs, allocates resources such as Claude review quota and agent time, and audits all project leads. The audit follows the harness rule that each rung audits the rung below it.
+The CoS keeps its own duties. It maintains this repository, adds ladders and rungs, allocates resources such as Claude review quota and agent time (see [`budget.md`](budget.md)), and audits all project leads. The audit follows the harness rule that each rung audits the rung below it.
 
 ## Authorized overnight physics iteration
 
